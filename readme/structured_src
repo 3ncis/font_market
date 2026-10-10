@@ -5,7 +5,7 @@ src/
 ├── components/              # Komponen UI global yang reusable
 │   ├── common/              # UI mendasar (BaseButton, BaseInput, BaseModal)
 │   └── layout/              # Navbar, Footer, Sidebar
-├── data/                    # DUMMY DATABASE (Mock Data)
+├── services/                # DUMMY DATABASE (Mock Data)
 │   ├── fonts.js             # Catalog font dummy
 │   └── categories.js        # Kategori font (Serif, Sans-serif, Display, dll)
 ├── composables/             # Logic reusable (e.g. useCart, useFontFilter)
@@ -20,7 +20,7 @@ src/
 │   ├── FontDetailView.vue
 │   ├── CartView.vue
 │   └── CheckoutView.vue
-├── router/
+├── router/                  # router nya
 │   └── index.js
 ├── App.vue
 └── main.js
