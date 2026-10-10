@@ -18,7 +18,7 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         <div class="md:col-span-6">
           <label class="block text-xs font-medium text-gray-500 mb-1">Tes Ketik Teks Anda</label>
-          <DefaultInput
+          <BaseInput
             :type="text"
             :modelValue="customText"
             placeholder="Ketik teks di sini.."
@@ -114,13 +114,22 @@
               </span>
             </div>
 <!-- :to="{ name: 'font-detail', params: { id: font.id } }" -->
-            <BaseButton
-              type="click"
-              variant="danger"
-              size="md"
-            >
-              Cancel
-            </BaseButton>
+            <div class="flex gap-3">
+              <BaseButton
+                type="click"
+                variant="danger"
+                size="md"
+              >
+                Cancel
+              </BaseButton>
+              <BaseButton
+                type="click"
+                variant="secondary"
+                size="md"
+              >
+                Submit
+              </BaseButton>
+            </div>
             <!-- <RouterLink
               class="inline-flex items-center gap-1.5 bg-gray-900 hover:bg-violet-600 text-white px-4 py-2.5 rounded-xl text-xs font-semibold transition"
             >
@@ -140,7 +149,7 @@
 <script>
 import MainLayout from '@/components/layout/MainLayout.vue';
 import BaseButton from '@/components/common/button/base_button.vue';
-import DefaultInput from '@/components/common/input/default_input.vue';
+import BaseInput from '@/components/common/input/base_input.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -148,7 +157,7 @@ export default defineComponent({
   components: {
     MainLayout,
     BaseButton,
-    DefaultInput
+    BaseInput
   },
   data() {
     return {
