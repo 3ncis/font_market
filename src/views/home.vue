@@ -108,14 +108,21 @@
               </span>
             </div>
 <!-- :to="{ name: 'font-detail', params: { id: font.id } }" -->
-            <RouterLink
+            <BaseButton
+              type="click"
+              variant="danger"
+              size="md"
+            >
+              Cancel
+            </BaseButton>
+            <!-- <RouterLink
               class="inline-flex items-center gap-1.5 bg-gray-900 hover:bg-violet-600 text-white px-4 py-2.5 rounded-xl text-xs font-semibold transition"
             >
               Lihat Detail
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </RouterLink>
+            </RouterLink> -->
           </div>
         </div>
       </div>
@@ -126,12 +133,14 @@
 
 <script>
 import MainLayout from '@/components/layout/MainLayout.vue';
+import BaseButton from '@/components/common/button/base_button.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'HomeView',
   components: {
-    MainLayout
+    MainLayout,
+    BaseButton
   },
   data() {
     return {
