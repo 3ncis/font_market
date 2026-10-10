@@ -37,7 +37,7 @@
 
 <script>
 export default {
-    name: 'button cancel',
+    name: 'base button',
     props: {
         type: {
             type: String,

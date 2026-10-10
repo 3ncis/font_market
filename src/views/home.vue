@@ -18,12 +18,18 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         <div class="md:col-span-6">
           <label class="block text-xs font-medium text-gray-500 mb-1">Tes Ketik Teks Anda</label>
-          <input
+          <DefaultInput
+            :type="text"
+            :modelValue="customText"
+            placeholder="Ketik teks di sini.."
+            @update:modelValue="customText = $event"
+          />
+          <!-- <input
             v-model="customText"
             type="text"
             placeholder="Ketik teks di sini..."
             class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
-          />
+          /> -->
         </div>
         <div class="md:col-span-3">
           <div class="flex justify-between items-center mb-1">
@@ -134,13 +140,15 @@
 <script>
 import MainLayout from '@/components/layout/MainLayout.vue';
 import BaseButton from '@/components/common/button/base_button.vue';
+import DefaultInput from '@/components/common/input/default_input.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'HomeView',
   components: {
     MainLayout,
-    BaseButton
+    BaseButton,
+    DefaultInput
   },
   data() {
     return {
