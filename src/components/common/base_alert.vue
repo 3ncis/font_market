@@ -24,7 +24,7 @@ import {
     successIcon,
     warningIcon,
     infoIcon
-} from '@/services/icons/index_icon'
+} from '@/core/services/icons/index_icon'
 export default {
     name: 'base alert',
     props: {
