@@ -1,0 +1,192 @@
+[
+  {
+    "id": "sinerva",
+    "name": "Sinerva",
+    "designer": "Aluyeah Studio (Indonesia)",
+    "category": "Display / Script",
+    "price": 0,
+    "fontFamily": "Sinerva",
+    "previewText": "Fon kaligrafi eksperimental bergaya elegan buatan Aluyeah Studio",
+    "files": {}
+  },
+  {
+    "id": "aceh-darusalam",
+    "name": "Aceh Darusalam",
+    "designer": "Adien Gunarta (Indonesia)",
+    "category": "Display / Ornamental",
+    "price": 0,
+    "fontFamily": "Aceh Darusalam",
+    "previewText": "Desain tipografi etnis yang terinspirasi dari kebudayaan Aceh",
+    "files": {}
+  },
+  {
+    "id": "swaraga",
+    "name": "Swaraga",
+    "designer": "Lettertype Studio (Indonesia)",
+    "category": "Serif / Display",
+    "price": 0,
+    "fontFamily": "Swaraga",
+    "previewText": "Rancangan serif klasik berkarakter kuat untuk judul dan konten elegan",
+    "files": {}
+  },
+  {
+    "id": "kerisdipa",
+    "name": "Kerisdipa",
+    "designer": "Yoga Letter (Indonesia)",
+    "category": "Display / Traditional",
+    "price": 0,
+    "fontFamily": "Kerisdipa",
+    "previewText": "Tipografi unik dengan sentuhan estetika budaya tradisional Nusantara",
+    "files": {}
+  },
+  {
+    "id": "upakarti",
+    "name": "Upakarti",
+    "designer": "Adien Gunarta (Indonesia)",
+    "category": "Sans Serif / Ethnic",
+    "price": 0,
+    "fontFamily": "Upakarti",
+    "previewText": "Font modern bernuansa lokal buatan kreator Probolinggo",
+    "files": {}
+  },
+  {
+    "id": "kemasyuran-jawa",
+    "name": "Kemasyuran Jawa",
+    "designer": "Adien Gunarta (Indonesia)",
+    "category": "Display / Decorative",
+    "price": 0,
+    "fontFamily": "Kemasyuran Jawa",
+    "previewText": "Font dekoratif terinspirasi aksara dan kejayaan kebudayaan Jawa",
+    "files": {}
+  },
+  {
+    "id": "belagak",
+    "name": "Belagak",
+    "designer": "Arterfak Project (Indonesia)",
+    "category": "Display / Vintage",
+    "price": 0,
+    "fontFamily": "Belagak",
+    "previewText": "Tipografi bold bergaya vintage buatan Arterfak Project",
+    "files": {}
+  },
+  {
+    "id": "awanika",
+    "name": "Awanika",
+    "designer": "Angeliaaa (Indonesia)",
+    "category": "Sans Serif / Casual",
+    "price": 0,
+    "fontFamily": "Awanika",
+    "previewText": "Bentuk huruf simpel dan fleksibel untuk desain media sosial",
+    "files": {}
+  },
+  {
+    "id": "qidung-swara",
+    "name": "Qidung Swara",
+    "designer": "creative17studio (Indonesia)",
+    "category": "Script / Calligraphy",
+    "price": 0,
+    "fontFamily": "Qidung Swara",
+    "previewText": "Gaya tulisan tangan bersambung yang artistik dan puitis",
+    "files": {}
+  },
+  {
+    "id": "jawadwipa-adisastra",
+    "name": "Jawadwipa Adisastra",
+    "designer": "Adien Gunarta (Indonesia)",
+    "category": "Display / Ethnic",
+    "price": 0,
+    "fontFamily": "Jawadwipa Adisastra",
+    "previewText": "Tipografi bergaya manuskrip kuno Nusantara karya Adien Gunarta",
+    "files": {}
+  },
+  {
+    "id": "ketoprak",
+    "name": "Ketoprak",
+    "designer": "diq™ DRMWN (Indonesia)",
+    "category": "Display / Playful",
+    "price": 0,
+    "fontFamily": "Ketoprak",
+    "previewText": "Tipografi santai dan menyenangkan yang terinspirasi dari seni pertunjukan Jawa",
+    "files": {}
+  },
+  {
+    "id": "indonesiana-serif",
+    "name": "Indonesiana Serif",
+    "designer": "fizzlabz (Indonesia)",
+    "category": "Serif",
+    "price": 0,
+    "fontFamily": "Indonesiana Serif",
+    "previewText": "Serif elegan serbaguna untuk kebutuhan cetak dan publikasi digital",
+    "files": {}
+  },
+  {
+    "id": "mandalika-indonesia",
+    "name": "Mandalika Indonesia",
+    "designer": "Studio Nusantara (Indonesia)",
+    "category": "Handwritten / Brush",
+    "price": 0,
+    "fontFamily": "Mandalika Indonesia",
+    "previewText": "Gaya goresan kuas dinamis yang mencerminkan keindahan tropis Lombok",
+    "files": {}
+  },
+  {
+    "id": "bali-island",
+    "name": "Bali Island",
+    "designer": "Amin Mario (Indonesia)",
+    "category": "Calligraphy / Decorative",
+    "price": 0,
+    "fontFamily": "Bali Island",
+    "previewText": "Font eksotis dengan ukiran terinspirasi oleh seni pulau Pulau Dewata Bali",
+    "files": {}
+  },
+  {
+    "id": "yogyakarta-indonesia",
+    "name": "Yogyakarta Indonesia",
+    "designer": "Yoga Letter (Indonesia)",
+    "category": "Handwritten / Script",
+    "price": 0,
+    "fontFamily": "Yogyakarta Indonesia",
+    "previewText": "Tulisan tangan mengalir artistik khas kota budaya Yogyakarta",
+    "files": {}
+  },
+  {
+    "id": "kabayan",
+    "name": "Kabayan",
+    "designer": "Syamsul Arifin (Indonesia)",
+    "category": "Handwritten / Display",
+    "price": 0,
+    "fontFamily": "Kabayan",
+    "previewText": "Bentuk huruf kasual dan humoris terinspirasi dari cerita rakyat Sunda",
+    "files": {}
+  },
+  {
+    "id": "belepotan",
+    "name": "Belepotan",
+    "designer": "Indotype Foundry (Indonesia)",
+    "category": "Display / Brush",
+    "price": 0,
+    "fontFamily": "Belepotan",
+    "previewText": "Desain ekspresif berpola cipratan tinta untuk tampilan poster unik",
+    "files": {}
+  },
+  {
+    "id": "cf-handsy-mood",
+    "name": "CF Handsy Mood",
+    "designer": "Indotype Foundry (Indonesia)",
+    "category": "Handwritten / Cursive",
+    "price": 0,
+    "fontFamily": "CF Handsy Mood",
+    "previewText": "Tulisan tangan feminin dan hangat cocok untuk kartu ucapan",
+    "files": {}
+  },
+  {
+    "id": "plus-jakarta-sans",
+    "name": "Plus Jakarta Sans",
+    "designer": "Tokotype (Indonesia)",
+    "category": "Sans Serif",
+    "price": 0,
+    "fontFamily": "Plus Jakarta Sans",
+    "previewText": "Tipografi modern geometris karya kreator lokal Indonesia",
+    "files": {}
+  }
+]

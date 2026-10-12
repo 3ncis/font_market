@@ -1,0 +1,1 @@
+import fonts from '../../data/fonts.json';
