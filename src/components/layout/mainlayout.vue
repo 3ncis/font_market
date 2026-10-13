@@ -14,7 +14,7 @@ export default {
 <template>
   <div class="">
     <Appheader/>
-    <div class="p-4">
+    <div class="">
       <slot></slot>
     </div>
     <Appfooter/>
