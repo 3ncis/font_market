@@ -3,38 +3,26 @@
     <div class="flex flex-col gap-10">
       <section class="w-full bg-[#FAF8F5] px-4 py-16 sm:px-6 sm:py-20 lg:px-20 lg:py-24">
         <div class="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-8 sm:gap-10">
-
-          <!-- Hero Text -->
           <div class="flex w-full max-w-[800px] flex-col items-center gap-4">
-
-            <!-- Section Label -->
             <div class="inline-flex items-center gap-2">
               <div class="h-px w-6 bg-[#121214]"></div>
-
               <span class="font-mono text-xs font-bold tracking-[0.24px] text-[#121214]">
                 ARSIP TIPOGRAFI NUSANTARA
               </span>
             </div>
-
-            <!-- Heading -->
             <h1
               class="w-full text-center font-serif text-4xl font-extrabold leading-tight tracking-tight text-[#121214] sm:text-5xl sm:leading-[1.1] lg:text-6xl lg:leading-[1.1]">
               Temukan Rupa Huruf Berkarakter Lokal Indonesia
             </h1>
-
-            <!-- Description -->
             <p class="w-full text-center text-base leading-relaxed text-[#8F897F] sm:text-lg sm:leading-[1.6]">
               AksaraNusa mengurasi rupa huruf premium dan gratis karya anak bangsa.
               Dari aksara adaptasi ragam hias hingga display modern untuk kebutuhan
               komersial Anda.
             </p>
           </div>
-
-          <!-- Search Bar -->
           <form
             class="flex w-full max-w-[720px] flex-col gap-3 rounded-xl border border-[#D1C9B8] bg-white p-3 sm:flex-row sm:items-center sm:gap-4 sm:py-2 sm:pl-5"
             @submit.prevent="handleSearch">
-            <!-- Search Input -->
             <div class="flex min-w-0 flex-1 items-center gap-3 px-1 sm:px-0">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
@@ -42,32 +30,25 @@
                 <circle cx="11" cy="11" r="7" />
                 <path d="m20 20-4-4" />
               </svg>
-
               <input v-model="searchQuery" type="search" placeholder="Cari nama font, desainer, atau gaya rupa..."
                 aria-label="Cari font"
                 class="w-full min-w-0 border-0 bg-transparent py-2 text-sm text-[#121214] outline-none placeholder:text-[#8F897F] focus:ring-0 sm:text-base" />
             </div>
-
-            <!-- Search Button -->
             <button type="submit"
               class="inline-flex shrink-0 items-center justify-center rounded-lg bg-[#121214] px-6 py-3 text-sm font-bold text-white transition-colors duration-200 hover:bg-[#333333] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#121214] sm:py-3">
               Temukan
             </button>
           </form>
-
-          <!-- Popular Suggestions -->
           <div class="flex w-full max-w-[720px] flex-wrap items-center justify-center gap-2 sm:gap-3">
             <span class="mr-1 font-mono text-xs font-normal tracking-wide text-[#8F897F]">
               POPULER:
             </span>
-
             <button v-for="tag in popularTags" :key="tag" type="button"
               class="rounded-full border border-[#D1C9B8] bg-white px-3 py-1.5 text-xs text-[#121214] transition-colors duration-200 hover:border-[#121214] hover:bg-[#121214] hover:text-white sm:text-sm"
               @click="selectTag(tag)">
               {{ tag }}
             </button>
           </div>
-
         </div>
       </section>
       <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
@@ -226,7 +207,17 @@ export default defineComponent({
       searchQuery: '',
       customText: 'The quick brown fox jumps over the lazy dog',
       fontSize: 32,
-      isLoading: false
+      isLoading: false,
+      popularTags: [
+        'Tradisional',
+        'Lontara',
+        'Kaligrafi Bali',
+        'Sans-Serif',
+        'Komersial Gratis',
+        'Batik',
+        'Aksara Jawa',
+        'Display'
+      ]
     }
   },
   computed: {
