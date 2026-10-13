@@ -1,5 +1,7 @@
+import router from "@/router";
 import axios from "axios";
 import { defineStore } from "pinia";
+import { dummyUsers } from "@/assets/users"
 
 interface user {
     id: number,
@@ -32,7 +34,50 @@ export const useAuthStore = defineStore('auth', {
     },
     actions: {
         setAuth(data: auth) {
-            
+            this.user = data.user
+            this.token = data.token
+            window.localStorage.setItem('user', JSON.stringify(data.user))
+            window.localStorage.setItem('token', data.token)
+
+            if(data.user?.role === 'admin'){
+                router.push('#')
+            }else if(data.user?.role === 'seller') {
+                router.push('#')
+            }else{
+                router.push('/')
+            }
+        },
+
+        async login(
+            email: string,
+            password: string
+        ){
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const foundUser = dummyUsers.find(
+                        (u) => u.email === email &&
+                        u.password === password
+                    )
+
+                    if(foundUser){
+                        const dummyToken = 'jwt-token-mock-' + Math.random().toString(36).substring(2)
+                        const {password, ...userWithoutPassword} = foundUser
+                        this.setAuth(userWithoutPassword, dummyToken)
+                        resolve(foundUser)
+                    }else{
+                        alert('Email atau Password Salah!')
+                        reject(new Error('Invalid Credentials'))
+                    }
+                }, 400)
+            })
+        },
+
+        async logout(){
+            this.user = null
+            this.token = null
+            window.localStorage.removeItem('token')
+            window.localStorage.removeItem('user')
+            router.push('/login')
         }
     }
 })
