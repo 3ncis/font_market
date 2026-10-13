@@ -51,6 +51,117 @@
           </div>
         </div>
       </section>
+      <section class="w-full bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-20 lg:py-20">
+        <div class="mx-auto flex w-full max-w-[1440px] flex-col gap-8">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div class="flex flex-col items-start gap-2">
+              <div class="inline-flex items-center gap-2">
+                <div class="h-px w-6 bg-[#121214]"></div>
+                <span class="font-mono text-xs font-bold tracking-[0.24px] text-[#121214]">
+                  KATEGORI KLASIFIKASI
+                </span>
+              </div>
+              <h2 class="font-serif text-3xl font-bold text-[#121214] sm:text-4xl">
+                Telusuri Ragam Rupa Huruf
+              </h2>
+            </div>
+            <RouterLink :to="{ name: 'home' }"
+              class="w-fit text-sm font-semibold text-[#121214] transition-colors hover:text-[#8F897F]">
+              Lihat Semua Gaya →
+            </RouterLink>
+          </div>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <RouterLink :to="{ name: 'home' }"
+              class="group flex items-center gap-4 rounded-lg border border-[#D1C9B8] bg-white p-5 transition-colors duration-200 hover:border-[#121214] sm:p-6">
+              <div
+                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#D1C9B8] bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                  class="h-6 w-6 text-[#121214]" aria-hidden="true">
+                  <path d="M4 7V4h16v3" />
+                  <path d="M9 20h6" />
+                  <path d="M12 4v16" />
+                </svg>
+              </div>
+
+              <div class="flex min-w-0 flex-col gap-1">
+                <h3 class="text-sm font-bold text-[#121214] sm:text-base">
+                  Serif Tradisional
+                </h3>
+                <p class="font-mono text-xs text-[#8F897F]">
+                  34 Font
+                </p>
+              </div>
+            </RouterLink>
+            <RouterLink :to="{ name: 'home' }"
+              class="group flex items-center gap-4 rounded-lg border border-[#D1C9B8] bg-white p-5 transition-colors duration-200 hover:border-[#121214] sm:p-6">
+              <div
+                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#D1C9B8] bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                  class="h-6 w-6 text-[#121214]" aria-hidden="true">
+                  <path d="M5 20 12 4l7 16" />
+                  <path d="M8 14h8" />
+                </svg>
+              </div>
+
+              <div class="flex min-w-0 flex-col gap-1">
+                <h3 class="text-sm font-bold text-[#121214] sm:text-base">
+                  Sans Serif Modern
+                </h3>
+                <p class="font-mono text-xs text-[#8F897F]">
+                  48 Font
+                </p>
+              </div>
+            </RouterLink>
+            <RouterLink :to="{ name: 'home' }"
+              class="group flex items-center gap-4 rounded-lg border border-[#D1C9B8] bg-white p-5 transition-colors duration-200 hover:border-[#121214] sm:p-6">
+              <div
+                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#D1C9B8] bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                  class="h-6 w-6 text-[#121214]" aria-hidden="true">
+                  <path d="M4 7h16" />
+                  <path d="M7 7v10a3 3 0 0 0 6 0V7" />
+                  <path d="M13 12h4a3 3 0 0 1 0 6h-4" />
+                </svg>
+              </div>
+
+              <div class="flex min-w-0 flex-col gap-1">
+                <h3 class="text-sm font-bold text-[#121214] sm:text-base">
+                  Sanskerta &amp; Aksara
+                </h3>
+                <p class="font-mono text-xs text-[#8F897F]">
+                  12 Font
+                </p>
+              </div>
+            </RouterLink>
+            <RouterLink :to="{ name: 'home' }"
+              class="group flex items-center gap-4 rounded-lg border border-[#D1C9B8] bg-white p-5 transition-colors duration-200 hover:border-[#121214] sm:p-6">
+              <div
+                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#D1C9B8] bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                  class="h-6 w-6 text-[#121214]" aria-hidden="true">
+                  <path d="M4 5h16" />
+                  <path d="M12 5v14" />
+                  <path d="M8 19h8" />
+                  <path d="M7 9h10" />
+                </svg>
+              </div>
+
+              <div class="flex min-w-0 flex-col gap-1">
+                <h3 class="text-sm font-bold text-[#121214] sm:text-base">
+                  Display Ekspresif
+                </h3>
+                <p class="font-mono text-xs text-[#8F897F]">
+                  29 Font
+                </p>
+              </div>
+            </RouterLink>
+          </div>
+        </div>
+      </section>
       <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
           <div class="md:col-span-6">
