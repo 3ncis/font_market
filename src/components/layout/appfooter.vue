@@ -38,28 +38,28 @@
 
             <ul class="flex flex-col gap-3">
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Daftar Rupa Huruf
                 </RouterLink>
               </li>
 
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Desainer Lokal
                 </RouterLink>
               </li>
 
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Lisensi Aksara
                 </RouterLink>
               </li>
 
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Kategori Budaya
                 </RouterLink>
@@ -75,28 +75,28 @@
 
             <ul class="flex flex-col gap-3">
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Pedoman Kontribusi
                 </RouterLink>
               </li>
 
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Buku Panduan Tipografi
                 </RouterLink>
               </li>
 
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Artikel Jurnal
                 </RouterLink>
               </li>
 
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Wawancara Ekslusif
                 </RouterLink>
@@ -112,28 +112,28 @@
 
             <ul class="flex flex-col gap-3">
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Tentang Kami
                 </RouterLink>
               </li>
 
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Kemitraan Studio
                 </RouterLink>
               </li>
 
               <li>
-                <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Kontrak Redaksi
                 </RouterLink>
               </li>
 
               <li>
-               <RouterLink :to="{ name : 'home' }"
+                <RouterLink :to="{ name: 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Kebijakan Privasi
                 </RouterLink>
@@ -148,8 +148,7 @@
         class="flex flex-col gap-6 border-t border-[#524E48] pt-6 sm:pt-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
         <!-- Copyright -->
         <p class="font-['Geist_Mono'] text-[10px] font-normal leading-5 text-[#8F897F] sm:text-xs">
-          © 2026 AKSARANUSA ARCHIVE. DIKEMBANGKAN OLEH KOMUNITAS PERUPA HURUF
-          INDONESIA.
+          © 2026 AKSARANUSA ARCHIVE. DIKEMBANGKAN OLEH MAHASISWA INDONESIA.
         </p>
 
         <!-- Social Media -->
