@@ -45,24 +45,24 @@
               </li>
 
               <li>
-                <a href="#desainer-lokal"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Desainer Lokal
-                </a>
+                </RouterLink>
               </li>
 
               <li>
-                <a href="#lisensi-aksara"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Lisensi Aksara
-                </a>
+                </RouterLink>
               </li>
 
               <li>
-                <a href="#kategori-budaya"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Kategori Budaya
-                </a>
+                </RouterLink>
               </li>
             </ul>
           </div>
@@ -75,31 +75,31 @@
 
             <ul class="flex flex-col gap-3">
               <li>
-                <a href="#pedoman-kontribusi"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Pedoman Kontribusi
-                </a>
+                </RouterLink>
               </li>
 
               <li>
-                <a href="#buku-panduan-tipografi"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Buku Panduan Tipografi
-                </a>
+                </RouterLink>
               </li>
 
               <li>
-                <a href="#artikel-jurnal"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Artikel Jurnal
-                </a>
+                </RouterLink>
               </li>
 
               <li>
-                <a href="#wawancara-eksklusif"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
-                  Wawancara Eksklusif
-                </a>
+                  Wawancara Ekslusif
+                </RouterLink>
               </li>
             </ul>
           </div>
@@ -112,31 +112,31 @@
 
             <ul class="flex flex-col gap-3">
               <li>
-                <a href="#tentang-kami"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Tentang Kami
-                </a>
+                </RouterLink>
               </li>
 
               <li>
-                <a href="#kemitraan-studio"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Kemitraan Studio
-                </a>
+                </RouterLink>
               </li>
 
               <li>
-                <a href="#kontak-redaksi"
+                <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
-                  Kontak Redaksi
-                </a>
+                  Kontrak Redaksi
+                </RouterLink>
               </li>
 
               <li>
-                <a href="#kebijakan-privasi"
+               <RouterLink :to="{ name : 'home' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Kebijakan Privasi
-                </a>
+                </RouterLink>
               </li>
             </ul>
           </div>
