@@ -259,6 +259,49 @@
           </div>
         </div>
       </section>
+      <section class="w-full bg-[#121214] px-4 py-12 sm:px-6 sm:py-16 lg:px-20 lg:py-20">
+        <div class="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-10 lg:flex-row lg:gap-16 xl:gap-20">
+          <div class="flex w-full flex-1 flex-col items-start gap-6">
+
+            <div class="inline-flex items-center gap-2">
+              <div class="h-px w-6 bg-white"></div>
+              <span class="font-mono text-xs font-bold tracking-[0.24px] text-white">
+                AKSARANUSA PREMIUM
+              </span>
+            </div>
+            <h2
+              class="w-full font-serif text-3xl font-extrabold leading-tight text-white sm:text-4xl sm:leading-[1.2] lg:text-[44px] lg:leading-[1.2]">
+              Dukung Perupa Huruf Lokal, Tingkatkan Estetika Proyek Anda
+            </h2>
+            <p class="w-full text-base leading-[1.6] text-[#8F897F]">
+              Dengan mengunduh lisensi premium atau melakukan donasi mikro, Anda
+              berkontribusi langsung pada kelestarian kreativitas digital para
+              desainer andal Indonesia.
+            </p>
+            <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
+              <RouterLink :to="{ name: 'home' }"
+                class="inline-flex items-center justify-center rounded-md bg-white px-8 py-4 text-sm font-bold text-[#121214] transition-colors duration-200 hover:bg-[#D1C9B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                Mulai Menelusuri
+              </RouterLink>
+              <RouterLink :to="{ name: 'home' }"
+                class="inline-flex items-center justify-center rounded-md border border-white px-8 py-4 text-sm font-bold text-white transition-colors duration-200 hover:bg-white hover:text-[#121214] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                Pelajari Lisensi
+              </RouterLink>
+            </div>
+          </div>
+          <div
+            class="flex min-h-[260px] w-full flex-col items-center justify-center gap-5 overflow-hidden rounded-2xl border border-[#D1C9B8] bg-white p-6 sm:min-h-[320px] sm:p-10 lg:w-[45%] lg:flex-none">
+            <span
+              class="font-serif text-[100px] font-black leading-none tracking-[-7.2px] text-[#121214] sm:text-[120px]"
+              aria-label="Aksara Jawa">
+              ꦄ
+            </span>
+            <span class="text-center font-mono text-xs tracking-[0.26px] text-[#8F897F] sm:text-[13px]">
+              BATIK GEOMETRIC SPECIMEN
+            </span>
+          </div>
+        </div>
+      </section>
     </div>
   </MainLayout>
 </template>
