@@ -43,12 +43,12 @@
       </div>
 
       <div class="hidden shrink-0 items-center gap-4 lg:flex">
-        <a href="#koleksi"
+        <RouterLink :to="{ name: 'home' }"
           class="font-['Geist'] text-sm font-semibold text-[#121214] transition-opacity hover:opacity-70">
-          Koleksi Saya
-        </a>
+          Koleksi saya
+        </RouterLink>
 
-        <a href="#submit-karya"
+        <RouterLink :to="{ name: 'home' }"
           class="flex items-center gap-2 rounded-md bg-[#121214] px-5 py-3 font-['Geist'] text-sm font-semibold text-[#FAF8F5] transition-colors hover:bg-[#383735]">
           Submit Karya
 
@@ -58,7 +58,7 @@
             <path d="M10 14 21 3" />
             <path d="M21 14v7H3V3h7" />
           </svg>
-        </a>
+        </RouterLink>
       </div>
 
       <button type="button"
