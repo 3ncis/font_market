@@ -310,6 +310,7 @@
 import MainLayout from '@/components/layout/MainLayout.vue';
 import BaseButton from '@/components/common/button/base_button.vue';
 import BaseInput from '@/components/common/input/base_input.vue';
+import ApiFont from "@/core/api/font/font.api"
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -322,40 +323,41 @@ export default defineComponent({
   data() {
     return {
       // Dummy Database Font
-      fonts: [
-        {
-          id: 'plus-jakarta-sans',
-          name: 'Plus Jakarta Sans',
-          designer: 'Tokotype',
-          category: 'Sans Serif',
-          price: 25,
-          previewText: 'The quick brown fox jumps over the lazy dog'
-        },
-        {
-          id: 'playfair-display',
-          name: 'Playfair Display',
-          designer: 'Claus Eggers Sørensen',
-          category: 'Serif',
-          price: 30,
-          previewText: 'Elegance is the only beauty that never fades'
-        },
-        {
-          id: 'fira-code',
-          name: 'Fira Code',
-          designer: 'Nikita Prokopov',
-          category: 'Monospace',
-          price: 0,
-          previewText: 'const font = () => { return "Awesome"; }'
-        },
-        {
-          id: 'syne-extra',
-          name: 'Syne Display',
-          designer: 'Bonjour Monde',
-          category: 'Display',
-          price: 15,
-          previewText: 'CREATIVE TYPEFACE FOR HEADLINES'
-        }
-      ],
+      // fonts: [
+      //   {
+      //     id: 'plus-jakarta-sans',
+      //     name: 'Plus Jakarta Sans',
+      //     designer: 'Tokotype',
+      //     category: 'Sans Serif',
+      //     price: 25,
+      //     previewText: 'The quick brown fox jumps over the lazy dog'
+      //   },
+      //   {
+      //     id: 'playfair-display',
+      //     name: 'Playfair Display',
+      //     designer: 'Claus Eggers Sørensen',
+      //     category: 'Serif',
+      //     price: 30,
+      //     previewText: 'Elegance is the only beauty that never fades'
+      //   },
+      //   {
+      //     id: 'fira-code',
+      //     name: 'Fira Code',
+      //     designer: 'Nikita Prokopov',
+      //     category: 'Monospace',
+      //     price: 0,
+      //     previewText: 'const font = () => { return "Awesome"; }'
+      //   },
+      //   {
+      //     id: 'syne-extra',
+      //     name: 'Syne Display',
+      //     designer: 'Bonjour Monde',
+      //     category: 'Display',
+      //     price: 15,
+      //     previewText: 'CREATIVE TYPEFACE FOR HEADLINES'
+      //   }
+      // ],
+      fonts: [],
       categories: ['All', 'Sans Serif', 'Serif', 'Monospace', 'Display'],
       selectedCategory: 'All',
       searchQuery: '',
@@ -374,6 +376,9 @@ export default defineComponent({
       ]
     }
   },
+  mounted() {
+    this.getAll();
+  },
   computed: {
     filteredFonts() {
       return this.fonts.filter((font) => {
@@ -387,6 +392,16 @@ export default defineComponent({
 
         return matchCategory && matchSearch
       })
+    }
+  },
+  methods: {
+    getAll(){
+      this.isLoading = true;
+      ApiFont.getAll()
+        .then((response) => {
+          console.log(response);
+          // this.dummyFonts = response.data;
+        })
     }
   }
 })

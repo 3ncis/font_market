@@ -1,7 +1,7 @@
 import router from "@/router";
 import axios from "axios";
 import { defineStore } from "pinia";
-import { dummyUsers } from "@/assets/users"
+import {dummyUsers} from "@/assets/users.js"
 
 interface user {
     id: number,
@@ -33,15 +33,15 @@ export const useAuthStore = defineStore('auth', {
         isSeller: (state) => state.user?.role === 'seller'
     },
     actions: {
-        setAuth(data: auth) {
-            this.user = data.user
-            this.token = data.token
-            window.localStorage.setItem('user', JSON.stringify(data.user))
-            window.localStorage.setItem('token', data.token)
+        setAuth(user: string, token: string) {
+            this.user = user
+            this.token = token
+            window.localStorage.setItem('user', JSON.stringify(user))
+            window.localStorage.setItem('token',token)
 
-            if(data.user?.role === 'admin'){
+            if(user?.role === 'admin'){
                 router.push('#')
-            }else if(data.user?.role === 'seller') {
+            }else if(user?.role === 'seller') {
                 router.push('#')
             }else{
                 router.push('/')
