@@ -273,28 +273,31 @@
             </h2>
           </div>
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-            <div
-              class="flex flex-col items-center gap-5 rounded-xl border border-[#D1C9B8] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-              <img :src="profile1 " alt="Foto profil Alifia Zahra" loading="lazy"
-                class="h-[120px] w-[120px] rounded-full border border-[#D1C9B8] object-cover" />
+            <RouterLink :to=" { name : 'home' } ">
+              <div
+                class="flex flex-col items-center gap-5 rounded-xl border border-[#D1C9B8] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <img :src="profile1 " alt="Foto profil Alifia Zahra" loading="lazy"
+                  class="h-[120px] w-[120px] rounded-full border border-[#D1C9B8] object-cover" />
 
-              <div class="flex w-full flex-col items-center gap-1 text-center">
-                <h3 class="font-serif text-xl font-bold text-[#121214]">
-                  Alifia Zahra
-                </h3>
+                <div class="flex w-full flex-col items-center gap-1 text-center">
+                  <h3 class="font-serif text-xl font-bold text-[#121214]">
+                    Alifia Zahra
+                  </h3>
 
-                <p class="text-[13px] text-[#524E48]">
-                  Studio Jagat · Yogyakarta
-                </p>
+                  <p class="text-[13px] text-[#524E48]">
+                    Studio Jagat · Yogyakarta
+                  </p>
+                </div>
+
+                <div class="h-px w-10 bg-[#D1C9B8]"></div>
+
+                <span class="text-center font-mono text-xs font-semibold tracking-wide text-[#8F897F]">
+                  6 RUPA HURUF PUBLISHED
+                </span>
               </div>
-
-              <div class="h-px w-10 bg-[#D1C9B8]"></div>
-
-              <span class="text-center font-mono text-xs font-semibold tracking-wide text-[#8F897F]">
-                6 RUPA HURUF PUBLISHED
-              </span>
-            </div>
-            <div
+            </RouterLink>
+            <RouterLink :to=" { name : 'home' } ">
+              <div
               class="flex flex-col items-center gap-5 rounded-xl border border-[#D1C9B8] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
               <img :src="profile2" alt="Foto profil Fardan Pangestu" loading="lazy"
                 class="h-[120px] w-[120px] rounded-full border border-[#D1C9B8] object-cover" />
@@ -314,8 +317,10 @@
               <span class="text-center font-mono text-xs font-semibold tracking-wide text-[#8F897F]">
                 11 RUPA HURUF PUBLISHED
               </span>
-            </div>
-            <div
+              </div>
+            </RouterLink>
+            <RouterLink :to=" { name : 'home' } ">
+              <div
               class="flex flex-col items-center gap-5 rounded-xl border border-[#D1C9B8] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:col-span-2 lg:col-span-1">
               <img :src="profile3" alt="Foto profil Sakti Dewantara" loading="lazy"
                 class="h-[120px] w-[120px] rounded-full border border-[#D1C9B8] object-cover" />
@@ -335,8 +340,8 @@
               <span class="text-center font-mono text-xs font-semibold tracking-wide text-[#8F897F]">
                 8 RUPA HURUF PUBLISHED
               </span>
-            </div>
-
+              </div>
+            </RouterLink>
           </div>
         </div>
       </section>
