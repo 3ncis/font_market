@@ -259,6 +259,87 @@
           </div>
         </div>
       </section>
+      <section class="w-full bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-20 lg:py-20">
+        <div class="mx-auto flex w-full max-w-[1440px] flex-col gap-8 sm:gap-10">
+          <div class="flex flex-col items-start gap-2">
+            <div class="inline-flex items-center gap-2">
+              <div class="h-px w-6 bg-[#121214]"></div>
+              <span class="font-mono text-xs font-bold tracking-[0.24px] text-[#121214]">
+                TALENTA LOKAL NUSANTARA
+              </span>
+            </div>
+            <h2 class="font-serif text-3xl font-bold text-[#121214] sm:text-4xl">
+              Kenali Para Perupa Huruf
+            </h2>
+          </div>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+            <div
+              class="flex flex-col items-center gap-5 rounded-xl border border-[#D1C9B8] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+              <img :src="profile1 " alt="Foto profil Alifia Zahra" loading="lazy"
+                class="h-[120px] w-[120px] rounded-full border border-[#D1C9B8] object-cover" />
+
+              <div class="flex w-full flex-col items-center gap-1 text-center">
+                <h3 class="font-serif text-xl font-bold text-[#121214]">
+                  Alifia Zahra
+                </h3>
+
+                <p class="text-[13px] text-[#524E48]">
+                  Studio Jagat · Yogyakarta
+                </p>
+              </div>
+
+              <div class="h-px w-10 bg-[#D1C9B8]"></div>
+
+              <span class="text-center font-mono text-xs font-semibold tracking-wide text-[#8F897F]">
+                6 RUPA HURUF PUBLISHED
+              </span>
+            </div>
+            <div
+              class="flex flex-col items-center gap-5 rounded-xl border border-[#D1C9B8] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+              <img :src="profile2" alt="Foto profil Fardan Pangestu" loading="lazy"
+                class="h-[120px] w-[120px] rounded-full border border-[#D1C9B8] object-cover" />
+
+              <div class="flex w-full flex-col items-center gap-1 text-center">
+                <h3 class="font-serif text-xl font-bold text-[#121214]">
+                  Fardan Pangestu
+                </h3>
+
+                <p class="text-[13px] text-[#524E48]">
+                  Kriya Aksara · Bandung
+                </p>
+              </div>
+
+              <div class="h-px w-10 bg-[#D1C9B8]"></div>
+
+              <span class="text-center font-mono text-xs font-semibold tracking-wide text-[#8F897F]">
+                11 RUPA HURUF PUBLISHED
+              </span>
+            </div>
+            <div
+              class="flex flex-col items-center gap-5 rounded-xl border border-[#D1C9B8] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:col-span-2 lg:col-span-1">
+              <img :src="profile3" alt="Foto profil Sakti Dewantara" loading="lazy"
+                class="h-[120px] w-[120px] rounded-full border border-[#D1C9B8] object-cover" />
+
+              <div class="flex w-full flex-col items-center gap-1 text-center">
+                <h3 class="font-serif text-xl font-bold text-[#121214]">
+                  Sakti Dewantara
+                </h3>
+
+                <p class="text-[13px] text-[#524E48]">
+                  Aksara Dewa · Denpasar
+                </p>
+              </div>
+
+              <div class="h-px w-10 bg-[#D1C9B8]"></div>
+
+              <span class="text-center font-mono text-xs font-semibold tracking-wide text-[#8F897F]">
+                8 RUPA HURUF PUBLISHED
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </section>
       <section class="w-full bg-[#121214] px-4 py-12 sm:px-6 sm:py-16 lg:px-20 lg:py-20">
         <div class="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-10 lg:flex-row lg:gap-16 xl:gap-20">
           <div class="flex w-full flex-1 flex-col items-start gap-6">
@@ -312,6 +393,9 @@ import BaseButton from '@/components/common/button/base_button.vue';
 import BaseInput from '@/components/common/input/base_input.vue';
 import ApiFont from "@/core/api/font/font.api"
 import { defineComponent } from 'vue';
+import profile1 from '@/assets/image/profile1.png';
+import profile2 from '@/assets/image/profile2.png';
+import profile3 from '@/assets/image/profile3.png';
 
 export default defineComponent({
   name: 'HomeView',
@@ -364,6 +448,9 @@ export default defineComponent({
       customText: 'The quick brown fox jumps over the lazy dog',
       fontSize: 32,
       isLoading: false,
+      profile1,
+      profile2,
+      profile3,
       popularTags: [
         'Tradisional',
         'Lontara',
@@ -395,7 +482,7 @@ export default defineComponent({
     }
   },
   methods: {
-    getAll(){
+    getAll() {
       this.isLoading = true;
       ApiFont.getAll()
         .then((response) => {
