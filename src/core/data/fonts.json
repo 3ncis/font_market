@@ -188,5 +188,35 @@
     "fontFamily": "Plus Jakarta Sans",
     "previewText": "Tipografi modern geometris karya kreator lokal Indonesia",
     "files": {}
+  },
+  {
+    "id": "playfair-display",
+    "name": "Playfair Display",
+    "designer": "Claus Eggers Sørensen",
+    "category": "Serif",
+    "price": 30,
+    "fontFamily": "Playfair Display",
+    "previewText": "Elegance is the only beauty that never fades",
+    "files": {}
+  },
+  {
+    "id": "fira-code",
+    "name": "Fira Code",
+    "designer": "Nikita Prokopov",
+    "category": "Monospace",
+    "price": 0,
+    "fontFamily": "Fira Code",
+    "previewText": "const font = () => { return \"Awesome\"; }",
+    "files": {}
+  },
+  {
+    "id": "syne-extra",
+    "name": "Syne Display",
+    "designer": "Bonjour Monde",
+    "category": "Display",
+    "price": 15,
+    "fontFamily": "Syne",
+    "previewText": "CREATIVE TYPEFACE FOR HEADLINES",
+    "files": {}
   }
 ]

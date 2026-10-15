@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+/* Font lokal: nama di font-family harus sama dengan field "fontFamily" di fonts.json */
+@font-face {
+  font-family: 'Sinerva';
+  src: url('../fonts/Sinerva.otf');
+}
+
+@font-face {
+  font-family: 'Awanika';
+  src: url('../fonts/Awanika.ttf');
+}
+
+@font-face {
+  font-family: 'Kerisdipa';
+  src: url('../fonts/kerisdipa_Demo.ttf');
+}

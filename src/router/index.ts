@@ -6,24 +6,17 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('@/views/home.vue'),
-    meta: {
-        title: 'home'
-    }
-    // children: [
-    //   {
-    //     path: '',
-    //     name: 'home',
-    //     component: () => import('@/views/HomeView.vue'),
-    //     meta: { title: 'Katalog Font - E-Commerce' }
-    //   },
-    //   {
-    //     path: 'font/:id',
-    //     name: 'font-detail',
-    //     component: () => import('@/views/FontDetailView.vue'),
-    //     meta: { title: 'Detail Font' }
-    //   },
-    // ]
+    meta: { title: 'Beranda' }
   },
+  {
+    // :id adalah parameter dinamis -> /font/sinerva, /font/swaraga, dst.
+    path: '/font/:id',
+    name: 'font-detail',
+    component: () => import('@/views/fontdetail.vue'),
+    meta: { title: 'Detail Font' }
+  },
+  // TODO: halaman berikutnya (login, 404) ditambahkan di sini
+]
   // Halaman Auth (Tanpa Navbar/Footer Utama)
 //   {
 //     path: '/login',
@@ -38,7 +31,7 @@ const routes = [
 //     component: () => import('@/views/NotFoundView.vue'),
 //     meta: { title: 'Halaman Tidak Ditemukan' }
 //   }
-]
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
