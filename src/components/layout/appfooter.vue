@@ -38,7 +38,7 @@
 
             <ul class="flex flex-col gap-3">
               <li>
-                <RouterLink :to="{ name: 'home' }"
+                <RouterLink :to="{ name: 'catalog' }"
                   class="font-['Geist'] text-sm font-normal text-[#8F897F] transition-colors hover:text-[#FAF8F5]">
                   Daftar Rupa Huruf
                 </RouterLink>

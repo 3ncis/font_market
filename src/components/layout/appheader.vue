@@ -21,13 +21,12 @@
       </RouterLink>
 
       <div class="hidden items-center gap-7 lg:flex">
-        <RouterLink :to=" { name : 'home' } " class="text-sm font-normal text-[#68686C] transition-colors hover:text-[#121214]">
+        <RouterLink :to=" { name : 'catalog' } " class="text-sm font-normal text-[#68686C] transition-colors hover:text-[#121214]">
           Eksplorasi
         </RouterLink>
 
         <RouterLink :to="{ name : 'home' }" class="text-sm font-normal text-[#68686C] transition-colors hover:text-[#121214]">
           Hasil Pencarian
-          <span class="absolute -bottom-1 left-0 h-0.5 w-4 bg-[#121214]"></span>
         </RouterLink>
 
         <RouterLink :to="{ name : 'home' }" class="text-sm font-normal text-[#68686C] transition-colors hover:text-[#121214]">

@@ -65,7 +65,7 @@
                 Telusuri Ragam Rupa Huruf
               </h2>
             </div>
-            <RouterLink :to="{ name: 'home' }"
+            <RouterLink :to="{ name: 'catalog' }"
               class="w-fit text-sm font-semibold text-[#121214] transition-colors hover:text-[#8F897F]">
               Lihat Semua Gaya →
             </RouterLink>
@@ -597,7 +597,7 @@
               desainer andal Indonesia.
             </p>
             <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
-              <RouterLink :to="{ name: 'home' }"
+              <RouterLink :to="{ name: 'catalog' }"
                 class="inline-flex items-center justify-center rounded-md bg-white px-8 py-4 text-sm font-bold text-[#121214] transition-colors duration-200 hover:bg-[#D1C9B8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                 Mulai Menelusuri
               </RouterLink>
