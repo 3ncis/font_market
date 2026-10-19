@@ -22,6 +22,13 @@ const routes = [
     component: () => import('@/views/Catalog.vue'),
     meta: { title: 'Catalog' }
   },
+  {
+    // :id adalah parameter dinamis -> /font/sinerva, /font/swaraga, dst.
+    path: '/detail',
+    name: 'detail',
+    component: () => import('@/views/fontdetail.vue'),
+    meta: { title: 'Detail' }
+  },
   // TODO: halaman berikutnya (login, 404) ditambahkan di sini
 ]
   // Halaman Auth (Tanpa Navbar/Footer Utama)

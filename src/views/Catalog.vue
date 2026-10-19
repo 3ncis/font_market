@@ -199,7 +199,11 @@
                         <!-- ============================================ -->
                         <div v-if="filteredFonts.length > 0" class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <article v-for="font in filteredFonts" :key="font.id"
-                                class="min-w-0 overflow-hidden rounded-lg border border-[#E2E2E4] transition-shadow hover:shadow-sm">
+                                class="relative min-w-0 overflow-hidden rounded-lg border border-[#E2E2E4] transition-shadow hover:shadow-sm">
+                                <RouterLink
+                                    :to="{ name: 'font-detail', params: { id: font.id } }"
+                                    class="absolute inset-0 z-10 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#121214]"
+                                    :aria-label="`Lihat detail ${font.name}`" />
                                 <!-- Preview Area -->
                                 <div
                                     class="flex min-h-[220px] flex-col justify-between gap-6 overflow-hidden bg-[#F6F6F5] p-5 sm:p-6">
@@ -224,16 +228,16 @@
                                         fontFamily: font.fontFamily,
                                         fontSize: `${previewFontSize}px`,
                                         lineHeight: 1.2,
-                                        fontWeight: font.fontWeight,
+                                        fontWeight: font.fontWeight || 400,
                                         fontStyle: font.fontStyle || 'normal',
                                         overflowWrap: 'anywhere',
                                     }">
-                                        {{ previewText || 'Tulis teks pratinjau Anda…' }}
+                                        {{ previewText || font.previewText || 'Tulis teks pratinjau Anda…' }}
                                     </div>
 
-                                    <!-- Font Styles -->
+                                    <!-- Font Styles / Info -->
                                     <div class="font-mono text-[10px] uppercase tracking-wide text-[#68686C]">
-                                        {{ font.styles }} gaya / ketebalan
+                                        {{ font.styles || 1 }} gaya / ketebalan
                                     </div>
                                 </div>
 
@@ -259,26 +263,25 @@
 
                                     <!-- License Information -->
                                     <p class="text-xs leading-5 text-[#68686C]">
-                                        {{ font.license }}
+                                        {{ font.license || 'Standar lisensi' }}
                                     </p>
 
                                     <div class="h-px w-full bg-[#E2E2E4]"></div>
 
                                     <!-- Actions -->
                                     <div class="flex flex-wrap items-center justify-between gap-3">
-                                        <a :href="font.detailUrl"
-                                            class="text-[13px] font-semibold text-[#121214] hover:underline">
+                                        <span class="text-[13px] font-semibold text-[#121214]">
                                             Lihat Detail →
-                                        </a>
+                                        </span>
 
                                         <button v-if="font.price > 0" type="button"
-                                            class="rounded border border-[#121214] bg-[#121214] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#121214]"
+                                            class="relative z-20 rounded border border-[#121214] bg-[#121214] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#121214]"
                                             @click="addToCart(font)">
                                             + Keranjang
                                         </button>
 
                                         <button v-else type="button"
-                                            class="rounded border border-[#E2E2E4] bg-white px-4 py-3 text-sm font-semibold text-[#121214] transition-colors hover:border-[#121214]"
+                                            class="relative z-20 rounded border border-[#E2E2E4] bg-white px-4 py-3 text-sm font-semibold text-[#121214] transition-colors hover:border-[#121214]"
                                             @click="downloadFont(font)">
                                             Unduh Gratis
                                         </button>
@@ -328,6 +331,7 @@
 <script>
 import { defineComponent } from 'vue';
 import AppLayout from '@/components/layout/applayout.vue';
+import FontApi from '@/core/api/font/font.api';
 
 export default defineComponent({
     name: 'Catalog',
@@ -338,28 +342,15 @@ export default defineComponent({
 
     data() {
         return {
-            // ==========================================
-            // SEARCH
-            // ==========================================
             searchQuery: '',
-
-            // ==========================================
-            // LIVE FONT PREVIEW
-            // ==========================================
             previewText: 'Lembut elok rumpun padi.',
             previewFontSize: 43,
 
-            // ==========================================
-            // FILTER STATE
-            // ==========================================
             selectedPrice: 'all',
             selectedCategories: [],
             selectedLicenses: [],
             sortBy: 'latest',
 
-            // ==========================================
-            // FILTER OPTIONS
-            // ==========================================
             priceOptions: [
                 { label: 'Semua', value: 'all' },
                 { label: 'Gratis', value: 'free' },
@@ -372,6 +363,7 @@ export default defineComponent({
                 'Display ekspresif',
                 'Aksara daerah',
                 'Kaligrafi & coretan',
+                'Display / Script',
             ],
 
             licenseOptions: [
@@ -382,152 +374,42 @@ export default defineComponent({
                 'Aplikasi berbayar',
             ],
 
-            // ==========================================
-            // DUMMY FONT DATABASE
-            // ==========================================
-            fonts: [
-                {
-                    id: 'rengganis-serif',
-                    name: 'Rengganis Serif',
-                    designer: 'Sakti Dewantara',
-                    category: 'Serif tradisional',
-                    price: 350000,
-                    license: 'Desktop berbayar',
-                    licenseDescription: 'Desktop · 1 pengguna · harga mulai',
-                    styles: 8,
-
-                    // Placeholder font browser.
-                    // Ganti dengan font asli ketika file font tersedia.
-                    fontFamily: 'Georgia, serif',
-                    fontWeight: 400,
-                    fontStyle: 'normal',
-
-                    detailUrl: '/fonts/rengganis-serif',
-                },
-
-                {
-                    id: 'sriwijaya-serif',
-                    name: 'Sriwijaya Serif',
-                    designer: 'Alifia Zahra',
-                    category: 'Serif tradisional',
-                    price: 0,
-                    license: 'Komersial gratis',
-                    licenseDescription: 'Komersial gratis · atribusi',
-                    styles: 6,
-
-                    fontFamily: 'Georgia, serif',
-                    fontWeight: 400,
-                    fontStyle: 'italic',
-
-                    detailUrl: '/fonts/sriwijaya-serif',
-                },
-
-                {
-                    id: 'batavia-sans-pro',
-                    name: 'Batavia Sans Pro',
-                    designer: 'Fardan Pangestu',
-                    category: 'Sans modern',
-                    price: 250000,
-                    license: 'Desktop berbayar',
-                    licenseDescription: 'Desktop · 1 pengguna · harga mulai',
-                    styles: 4,
-
-                    fontFamily: 'Arial, sans-serif',
-                    fontWeight: 600,
-                    fontStyle: 'normal',
-
-                    detailUrl: '/fonts/batavia-sans-pro',
-                },
-
-                {
-                    id: 'joglo-sans',
-                    name: 'Joglo Sans',
-                    designer: 'Alifia Zahra',
-                    category: 'Sans modern',
-                    price: 0,
-                    license: 'Personal / nonkomersial',
-                    licenseDescription: 'Personal · nonkomersial',
-                    styles: 5,
-
-                    fontFamily: 'Arial, sans-serif',
-                    fontWeight: 300,
-                    fontStyle: 'normal',
-
-                    detailUrl: '/fonts/joglo-sans',
-                },
-
-                {
-                    id: 'borobudur-display',
-                    name: 'Borobudur Display Pro',
-                    designer: 'Alifia Zahra',
-                    category: 'Display ekspresif',
-                    price: 200000,
-                    license: 'Web berbayar',
-                    licenseDescription: 'Lisensi web · harga mulai',
-                    styles: 2,
-
-                    fontFamily: 'Georgia, serif',
-                    fontWeight: 900,
-                    fontStyle: 'normal',
-
-                    detailUrl: '/fonts/borobudur-display',
-                },
-
-                {
-                    id: 'aksara-jawa',
-                    name: 'Aksara Jawa',
-                    designer: 'Kriya Aksara Studio',
-                    category: 'Aksara daerah',
-                    price: 0,
-                    license: 'Komersial gratis',
-                    licenseDescription: 'Komersial gratis · atribusi',
-                    styles: 2,
-
-                    fontFamily: 'serif',
-                    fontWeight: 400,
-                    fontStyle: 'normal',
-
-                    detailUrl: '/fonts/aksara-jawa',
-                },
-            ],
+            // Data array font akan diambil dari FontApi
+            fonts: [],
         };
     },
 
+    async mounted() {
+        await this.loadFonts();
+    },
+
     computed: {
-        // ==========================================
-        // FILTER + SEARCH + SORT
-        // ==========================================
         filteredFonts() {
             const query = this.searchQuery.trim().toLowerCase();
 
             let result = this.fonts.filter((font) => {
-                // Search berdasarkan nama font, desainer,
-                // kategori, dan informasi lisensi.
                 const searchableText = [
                     font.name,
                     font.designer,
                     font.category,
                     font.license,
-                    font.licenseDescription,
                 ]
+                    .filter(Boolean)
                     .join(' ')
                     .toLowerCase();
 
                 const matchSearch =
                     query === '' || searchableText.includes(query);
 
-                // Filter harga
                 const matchPrice =
                     this.selectedPrice === 'all' ||
                     (this.selectedPrice === 'free' && font.price === 0) ||
                     (this.selectedPrice === 'paid' && font.price > 0);
 
-                // Filter kategori
                 const matchCategory =
                     this.selectedCategories.length === 0 ||
                     this.selectedCategories.includes(font.category);
 
-                // Filter lisensi
                 const matchLicense =
                     this.selectedLicenses.length === 0 ||
                     this.selectedLicenses.includes(font.license);
@@ -540,7 +422,6 @@ export default defineComponent({
                 );
             });
 
-            // Pengurutan hasil
             if (this.sortBy === 'name') {
                 result.sort((a, b) => a.name.localeCompare(b.name));
             } else if (this.sortBy === 'price-low') {
@@ -548,7 +429,6 @@ export default defineComponent({
             } else if (this.sortBy === 'price-high') {
                 result.sort((a, b) => b.price - a.price);
             } else {
-                // Default: urutan data terbaru
                 result.sort((a, b) => {
                     return this.fonts.indexOf(a) - this.fonts.indexOf(b);
                 });
@@ -557,14 +437,12 @@ export default defineComponent({
             return result;
         },
 
-        // Jumlah font gratis yang sedang ditampilkan
         freeFontCount() {
             return this.filteredFonts.filter(
                 (font) => font.price === 0
             ).length;
         },
 
-        // Jumlah font berbayar yang sedang ditampilkan
         paidFontCount() {
             return this.filteredFonts.filter(
                 (font) => font.price > 0
@@ -573,12 +451,19 @@ export default defineComponent({
     },
 
     methods: {
-        // ==========================================
-        // SEARCH
-        // ==========================================
+        async loadFonts() {
+            try {
+                const data = await FontApi.getAll();
+                // Menangani jika kembalian API berupa error atau array langsung
+                if (!data.error) {
+                    this.fonts = data;
+                }
+            } catch (error) {
+                console.error('Gagal mengambil data font:', error);
+            }
+        },
+
         handleSearch() {
-            // Pencarian dilakukan otomatis melalui computed filteredFonts.
-            // Method ini tersedia untuk form search pada pengantar katalog.
             return this.filteredFonts;
         },
 
@@ -586,9 +471,6 @@ export default defineComponent({
             this.searchQuery = '';
         },
 
-        // ==========================================
-        // RESET FILTER
-        // ==========================================
         resetFilters() {
             this.selectedPrice = 'all';
             this.selectedCategories = [];
@@ -597,9 +479,6 @@ export default defineComponent({
             this.sortBy = 'latest';
         },
 
-        // ==========================================
-        // FORMAT HARGA
-        // ==========================================
         formatPrice(price) {
             if (price === 0) {
                 return 'Gratis';
@@ -612,16 +491,11 @@ export default defineComponent({
             }).format(price);
         },
 
-        // ==========================================
-        // ACTION BUTTONS
-        // ==========================================
         addToCart(font) {
-            // Placeholder sampai fitur keranjang dibuat.
             console.log('Font ditambahkan ke keranjang:', font.name);
         },
 
         downloadFont(font) {
-            // Placeholder sampai file font dan proses download tersedia.
             console.log('Permintaan unduh font:', font.name);
         },
     },

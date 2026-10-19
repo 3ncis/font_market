@@ -171,42 +171,42 @@
           </div>
 
           <div class="flex flex-col gap-5 sm:gap-6">
-            <RouterLink :to="{ name: 'home' }">
+            <RouterLink v-if="featuredFonts[0]" :to="{ name: 'font-detail', params: { id: featuredFonts[0].id } }">
               <article
               class="flex w-full flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:gap-8 sm:p-8">
               <!-- Card Meta -->
               <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-start">
                 <div class="flex flex-col gap-1">
                   <h3 class="font-serif text-2xl font-bold text-[#121214] sm:text-[28px]">
-                    Sriwijaya Serif
+                    {{ featuredFonts[0].name }}
                   </h3>
 
                   <p class="text-[13px] text-[#524E48]">
                     oleh
-                    <span class="font-semibold text-[#121214]">Alifia Zahra</span>
+                    <span class="font-semibold text-[#121214]">{{ featuredFonts[0].designer }}</span>
                   </p>
                 </div>
 
                 <span
                   class="inline-flex max-w-full items-center rounded border border-[#D1C9B8] px-2.5 py-1.5 font-mono text-[10px] font-semibold tracking-wide text-[#8F897F]">
-                  SERIF TRADISIONAL
+                  {{ featuredFonts[0].category }}
                 </span>
               </div>
 
               <div class="flex min-h-[100px] w-full items-center overflow-hidden py-3 sm:min-h-[120px]">
                 <p
                   class="w-full break-words font-serif text-[clamp(2rem,5vw,3rem)] font-normal leading-tight text-[#121214]">
-                  Garam Karsa Nusantara Raya
+                  {{ featuredFonts[0].previewText }}
                 </p>
               </div>
 
               <div
                 class="flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
                 <span class="font-mono text-xs text-[#8F897F]">
-                  6 Style / Weight
+                  {{ featuredFonts[0].fontFamily }}
                 </span>
 
-                <a href="/fonts/sriwijaya-serif"
+                <span
                   class="inline-flex w-fit items-center gap-2 text-[13px] font-bold text-[#121214] transition-colors hover:text-[#8F897F]">
                   Lihat Detail
 
@@ -216,47 +216,49 @@
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
                   </svg>
-                </a>
+                </span>
               </div>
             </article>
             </RouterLink>
             <div class="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2">
-              <RouterLink :to="{ name: 'home' }">
+              <RouterLink v-if="featuredFonts[1]" :to="{ name: 'font-detail', params: { id: featuredFonts[1].id } }"
+                class="block h-full">
                 <article
-                class="flex min-w-0 flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:p-6">
+                class="flex h-full min-h-[360px] min-w-0 flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:p-6">
                 <!-- Card Meta -->
                 <div class="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-start">
                   <div class="flex min-w-0 flex-col gap-1">
                     <h3 class="font-serif text-2xl font-bold text-[#121214]">
-                      Batavia Sans
+                      {{ featuredFonts[1].name }}
                     </h3>
 
                     <p class="text-[13px] text-[#524E48]">
                       oleh
-                      <span class="font-semibold text-[#121214]">Fardan Pangestu</span>
+                      <span class="font-semibold text-[#121214]">{{ featuredFonts[1].designer }}</span>
                     </p>
                   </div>
 
                   <span
                     class="inline-flex max-w-full items-center rounded border border-[#D1C9B8] px-2.5 py-1.5 font-mono text-[10px] font-semibold tracking-wide text-[#8F897F]">
-                    SANS SERIF MODERN
+                    {{ featuredFonts[1].category }}
                   </span>
                 </div>
 
-                <div class="flex min-h-[100px] w-full items-center overflow-hidden py-3">
+                <div class="flex min-h-[100px] flex-1 w-full items-center overflow-hidden py-3">
                   <p
-                    class="w-full break-words font-serif text-[clamp(1.75rem,4vw,2.25rem)] font-normal leading-tight text-[#121214]">
-                    Harmoni Estetika Ibu Kota
+                    class="w-full break-words font-serif text-[clamp(1.75rem,4vw,2.25rem)] font-normal leading-tight text-[#121214]"
+                    :style="{ fontFamily: featuredFonts[1].fontFamily }">
+                    {{ featuredFonts[1].previewText }}
                   </p>
                 </div>
 
                 <div
-                  class="flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
+                  class="mt-auto flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
                   <span class="font-mono text-xs text-[#8F897F]">
-                    4 Style / Weight
+                    {{ featuredFonts[1].fontFamily }}
                   </span>
 
-                  <a href="/fonts/batavia-sans"
+                  <span
                     class="inline-flex w-fit items-center gap-2 text-[13px] font-bold text-[#121214] transition-colors hover:text-[#8F897F]">
                     Lihat Detail
 
@@ -266,46 +268,47 @@
                       <path d="M5 12h14" />
                       <path d="m12 5 7 7-7 7" />
                     </svg>
-                  </a>
+                  </span>
                 </div>
               </article>
               </RouterLink>
-              <RouterLink :to=" { name : 'home' } ">
+              <RouterLink v-if="featuredFonts[2]" :to="{ name: 'font-detail', params: { id: featuredFonts[2].id } }"
+                class="block h-full">
                 <article
-                class="flex min-w-0 flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:p-6">
+                class="flex h-full min-h-[360px] min-w-0 flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:p-6">
                 <!-- Card Meta -->
                 <div class="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-start">
                   <div class="flex min-w-0 flex-col gap-1">
                     <h3 class="font-serif text-2xl font-bold text-[#121214]">
-                      Aksara Jawa
+                      {{ featuredFonts[2].name }}
                     </h3>
 
                     <p class="text-[13px] text-[#524E48]">
                       oleh
-                      <span class="font-semibold text-[#121214]">Kriya Aksara Studio</span>
+                      <span class="font-semibold text-[#121214]">{{ featuredFonts[2].designer }}</span>
                     </p>
                   </div>
 
                   <span
                     class="inline-flex max-w-full items-center rounded border border-[#D1C9B8] px-2.5 py-1.5 font-mono text-[10px] font-semibold tracking-wide text-[#8F897F]">
-                    SANSKERTA &amp; AKSARA
+                    {{ featuredFonts[2].category }}
                   </span>
                 </div>
 
-                <div class="flex min-h-[100px] w-full items-center overflow-hidden py-3">
+                <div class="flex min-h-[100px] flex-1 w-full items-center overflow-hidden py-3">
                   <p class="w-full break-words font-serif text-[clamp(1.75rem,4vw,2.25rem)] leading-relaxed text-[#121214]"
-                    lang="jv">
-                    ꦧꦱꦗꦮꦱꦸꦒꦼꦁꦫꦮꦸꦃ
+                    :style="{ fontFamily: featuredFonts[2].fontFamily }">
+                    {{ featuredFonts[2].previewText }}
                   </p>
                 </div>
 
                 <div
-                  class="flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
+                  class="mt-auto flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
                   <span class="font-mono text-xs text-[#8F897F]">
-                    2 Style / Weight
+                    {{ featuredFonts[2].fontFamily }}
                   </span>
 
-                  <a href="/fonts/aksara-jawa"
+                  <span
                     class="inline-flex w-fit items-center gap-2 text-[13px] font-bold text-[#121214] transition-colors hover:text-[#8F897F]">
                     Lihat Detail
 
@@ -315,7 +318,7 @@
                       <path d="M5 12h14" />
                       <path d="m12 5 7 7-7 7" />
                     </svg>
-                  </a>
+                  </span>
                 </div>
               </article>
               </RouterLink>
@@ -340,42 +343,42 @@
           </div>
 
           <div class="flex flex-col gap-5 sm:gap-6">
-            <RouterLink :to="{ name: 'home' }">
+            <RouterLink v-if="featuredFonts[0]" :to="{ name: 'font-detail', params: { id: featuredFonts[0].id } }">
               <article
               class="flex w-full flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:gap-8 sm:p-8">
               <!-- Card Meta -->
               <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-start">
                 <div class="flex flex-col gap-1">
                   <h3 class="font-serif text-2xl font-bold text-[#121214] sm:text-[28px]">
-                    Sriwijaya Serif
+                    {{ featuredFonts[0].name }}
                   </h3>
 
                   <p class="text-[13px] text-[#524E48]">
                     oleh
-                    <span class="font-semibold text-[#121214]">Alifia Zahra</span>
+                    <span class="font-semibold text-[#121214]">{{ featuredFonts[0].designer }}</span>
                   </p>
                 </div>
 
                 <span
                   class="inline-flex max-w-full items-center rounded border border-[#D1C9B8] px-2.5 py-1.5 font-mono text-[10px] font-semibold tracking-wide text-[#8F897F]">
-                  SERIF TRADISIONAL
+                  {{ featuredFonts[0].category }}
                 </span>
               </div>
 
               <div class="flex min-h-[100px] w-full items-center overflow-hidden py-3 sm:min-h-[120px]">
                 <p
                   class="w-full break-words font-serif text-[clamp(2rem,5vw,3rem)] font-normal leading-tight text-[#121214]">
-                  Garam Karsa Nusantara Raya
+                  {{ featuredFonts[0].previewText }}
                 </p>
               </div>
 
               <div
                 class="flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
                 <span class="font-mono text-xs text-[#8F897F]">
-                  6 Style / Weight
+                  {{ featuredFonts[0].fontFamily }}
                 </span>
 
-                <a href="/fonts/sriwijaya-serif"
+                <span
                   class="inline-flex w-fit items-center gap-2 text-[13px] font-bold text-[#121214] transition-colors hover:text-[#8F897F]">
                   Lihat Detail
 
@@ -385,47 +388,49 @@
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
                   </svg>
-                </a>
+                </span>
               </div>
             </article>
             </RouterLink>
             <div class="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2">
-              <RouterLink :to="{ name: 'home' }">
+              <RouterLink v-if="featuredFonts[1]" :to="{ name: 'font-detail', params: { id: featuredFonts[1].id } }"
+                class="block h-full">
                 <article
-                class="flex min-w-0 flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:p-6">
+                class="flex h-full min-h-[360px] min-w-0 flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:p-6">
                 <!-- Card Meta -->
                 <div class="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-start">
                   <div class="flex min-w-0 flex-col gap-1">
                     <h3 class="font-serif text-2xl font-bold text-[#121214]">
-                      Batavia Sans
+                      {{ featuredFonts[1].name }}
                     </h3>
 
                     <p class="text-[13px] text-[#524E48]">
                       oleh
-                      <span class="font-semibold text-[#121214]">Fardan Pangestu</span>
+                      <span class="font-semibold text-[#121214]">{{ featuredFonts[1].designer }}</span>
                     </p>
                   </div>
 
                   <span
                     class="inline-flex max-w-full items-center rounded border border-[#D1C9B8] px-2.5 py-1.5 font-mono text-[10px] font-semibold tracking-wide text-[#8F897F]">
-                    SANS SERIF MODERN
+                    {{ featuredFonts[1].category }}
                   </span>
                 </div>
 
-                <div class="flex min-h-[100px] w-full items-center overflow-hidden py-3">
+                <div class="flex min-h-[100px] flex-1 w-full items-center overflow-hidden py-3">
                   <p
-                    class="w-full break-words font-serif text-[clamp(1.75rem,4vw,2.25rem)] font-normal leading-tight text-[#121214]">
-                    Harmoni Estetika Ibu Kota
+                    class="w-full break-words font-serif text-[clamp(1.75rem,4vw,2.25rem)] font-normal leading-tight text-[#121214]"
+                    :style="{ fontFamily: featuredFonts[1].fontFamily }">
+                    {{ featuredFonts[1].previewText }}
                   </p>
                 </div>
 
                 <div
-                  class="flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
+                  class="mt-auto flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
                   <span class="font-mono text-xs text-[#8F897F]">
-                    4 Style / Weight
+                    {{ featuredFonts[1].fontFamily }}
                   </span>
 
-                  <a href="/fonts/batavia-sans"
+                  <span
                     class="inline-flex w-fit items-center gap-2 text-[13px] font-bold text-[#121214] transition-colors hover:text-[#8F897F]">
                     Lihat Detail
 
@@ -435,46 +440,47 @@
                       <path d="M5 12h14" />
                       <path d="m12 5 7 7-7 7" />
                     </svg>
-                  </a>
+                  </span>
                 </div>
               </article>
               </RouterLink>
-              <RouterLink :to=" { name : 'home' } ">
+              <RouterLink v-if="featuredFonts[2]" :to="{ name: 'font-detail', params: { id: featuredFonts[2].id } }"
+                class="block h-full">
                 <article
-                class="flex min-w-0 flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:p-6">
+                class="flex h-full min-h-[360px] min-w-0 flex-col gap-6 rounded-xl border border-[#D1C9B8] bg-white p-5 transition-all duration-300 hover:border-[#8F897F] hover:shadow-md sm:p-6">
                 <!-- Card Meta -->
                 <div class="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-start">
                   <div class="flex min-w-0 flex-col gap-1">
                     <h3 class="font-serif text-2xl font-bold text-[#121214]">
-                      Aksara Jawa
+                      {{ featuredFonts[2].name }}
                     </h3>
 
                     <p class="text-[13px] text-[#524E48]">
                       oleh
-                      <span class="font-semibold text-[#121214]">Kriya Aksara Studio</span>
+                      <span class="font-semibold text-[#121214]">{{ featuredFonts[2].designer }}</span>
                     </p>
                   </div>
 
                   <span
                     class="inline-flex max-w-full items-center rounded border border-[#D1C9B8] px-2.5 py-1.5 font-mono text-[10px] font-semibold tracking-wide text-[#8F897F]">
-                    SANSKERTA &amp; AKSARA
+                    {{ featuredFonts[2].category }}
                   </span>
                 </div>
 
-                <div class="flex min-h-[100px] w-full items-center overflow-hidden py-3">
+                <div class="flex min-h-[100px] flex-1 w-full items-center overflow-hidden py-3">
                   <p class="w-full break-words font-serif text-[clamp(1.75rem,4vw,2.25rem)] leading-relaxed text-[#121214]"
-                    lang="jv">
-                    ꦧꦱꦗꦮꦱꦸꦒꦼꦁꦫꦮꦸꦃ
+                    :style="{ fontFamily: featuredFonts[2].fontFamily }">
+                    {{ featuredFonts[2].previewText }}
                   </p>
                 </div>
 
                 <div
-                  class="flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
+                  class="mt-auto flex flex-col gap-4 border-t border-[#D1C9B8] pt-5 sm:flex-row sm:items-center sm:justify-between">
                   <span class="font-mono text-xs text-[#8F897F]">
-                    2 Style / Weight
+                    {{ featuredFonts[2].fontFamily }}
                   </span>
 
-                  <a href="/fonts/aksara-jawa"
+                  <span
                     class="inline-flex w-fit items-center gap-2 text-[13px] font-bold text-[#121214] transition-colors hover:text-[#8F897F]">
                     Lihat Detail
 
@@ -484,7 +490,7 @@
                       <path d="M5 12h14" />
                       <path d="m12 5 7 7-7 7" />
                     </svg>
-                  </a>
+                  </span>
                 </div>
               </article>
               </RouterLink>
@@ -643,42 +649,7 @@ export default defineComponent({
   },
   data() {
     return {
-      // Dummy Database Font
-      fonts: [
-        {
-          id: "plus-jakarta-sans",
-          name: "Plus Jakarta Sans",
-          designer: "Tokotype",
-          category: "Sans Serif",
-          price: 25,
-          previewText: "The quick brown fox jumps over the lazy dog",
-        },
-        {
-          id: "playfair-display",
-          name: "Playfair Display",
-          designer: "Claus Eggers Sørensen",
-          category: "Serif",
-          price: 30,
-          previewText: "Elegance is the only beauty that never fades",
-        },
-        {
-          id: "fira-code",
-          name: "Fira Code",
-          designer: "Nikita Prokopov",
-          category: "Monospace",
-          price: 0,
-          previewText: 'const font = () => { return "Awesome"; }',
-        },
-        {
-          id: "syne-extra",
-          name: "Syne Display",
-          designer: "Bonjour Monde",
-          category: "Display",
-          price: 15,
-          previewText: "CREATIVE TYPEFACE FOR HEADLINES",
-        },
-      ],
-      // fonts: [],
+      fonts: [],
       categories: ["All", "Sans Serif", "Serif", "Monospace", "Display"],
       selectedCategory: "All",
       searchQuery: "",
@@ -702,6 +673,9 @@ export default defineComponent({
   },
 
   computed: {
+    featuredFonts() {
+      return this.fonts.slice(0, 3);
+    },
     filteredFonts() {
       return this.fonts.filter((font) => {
         const matchCategory =
@@ -716,16 +690,23 @@ export default defineComponent({
       });
     },
   },
+  mounted() {
+    this.getAll();
+  },
   methods: {
-    getAll() {
+    async getAll() {
       this.isLoading = true;
-      ApiFont.getAll()
-        .then((response) => {
-          this.fonts = response;
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
+      try {
+        const response = await ApiFont.getAll();
+        if (!Array.isArray(response)) {
+          throw new TypeError('Font data must be an array.');
+        }
+        this.fonts = response;
+      } catch (error) {
+        console.error('Gagal mengambil data font:', error);
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 });
