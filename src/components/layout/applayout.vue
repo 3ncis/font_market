@@ -12,9 +12,9 @@ export default {
 </script>
 
 <template>
-  <div class="">
+  <div class="flex min-h-screen flex-col">
     <Appheader/>
-    <div class="">
+    <div class="flex-1 pt-[76px] lg:pt-[90px]">
       <slot></slot>
     </div>
     <AppfooterLight/>
