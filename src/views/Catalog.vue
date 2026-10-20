@@ -194,6 +194,11 @@
                             </div>
                         </div>
 
+                        <p v-if="cartFeedback" role="status" aria-live="polite"
+                            class="text-sm text-[#68686C]">
+                            {{ cartFeedback }}
+                        </p>
+
                         <!-- ============================================ -->
                         <!-- FONT CARDS -->
                         <!-- ============================================ -->
@@ -332,6 +337,7 @@
 import { defineComponent } from 'vue';
 import AppLayout from '@/components/layout/applayout.vue';
 import FontApi from '@/core/api/font/font.api';
+import { useCartStore } from '@/core/cart/cartStore';
 
 export default defineComponent({
     name: 'Catalog',
@@ -376,6 +382,7 @@ export default defineComponent({
 
             // Data array font akan diambil dari FontApi
             fonts: [],
+            cartFeedback: '',
         };
     },
 
@@ -492,11 +499,34 @@ export default defineComponent({
         },
 
         addToCart(font) {
-            console.log('Font ditambahkan ke keranjang:', font.name);
+            const result = useCartStore().addFont(font);
+
+            if (result.added) {
+                this.cartFeedback = `${font.name} berhasil ditambahkan ke keranjang.`;
+            } else if (result.reason === 'duplicate') {
+                this.cartFeedback = `${font.name} sudah ada di keranjang.`;
+            } else {
+                this.cartFeedback = 'Font ini tidak tersedia untuk ditambahkan ke keranjang.';
+            }
         },
 
         downloadFont(font) {
-            console.log('Permintaan unduh font:', font.name);
+            const file = font.files
+                ? Object.values(font.files).find(
+                    (value) => typeof value === 'string' && value.trim()
+                )
+                : null;
+
+            if (!file) {
+                this.cartFeedback = 'File font belum tersedia untuk diunduh.';
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.href = file;
+            link.download = font.id;
+            link.click();
+            this.cartFeedback = '';
         },
     },
 });

@@ -1,12 +1,14 @@
 <script>
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useCartStore } from '@/core/cart/cartStore';
 
 export default defineComponent({
   name: 'AppHeader',
 
   setup() {
     const isVisible = ref(true);
+    const cartStore = useCartStore();
     let lastScrollY = 0;
     let ticking = false;
 
@@ -51,6 +53,7 @@ export default defineComponent({
 
     return {
       isVisible,
+      cartStore,
     };
   },
 
@@ -151,7 +154,7 @@ export default defineComponent({
           <span
             class="absolute -right-0.5 -top-0.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#121214] px-1 font-mono text-[10px] text-white"
           >
-            2
+            {{ cartStore.itemCount }}
           </span>
         </RouterLink>
 
