@@ -41,13 +41,8 @@
                     </form>
                 </div>
             </section>
-            <!-- CATALOG MAIN CONTENT -->
             <section class="w-full px-4 py-9 sm:px-6 lg:px-20 lg:pb-16 lg:pt-9">
                 <div class="flex flex-col items-start gap-10 xl:flex-row">
-
-                    <!-- ============================================ -->
-                    <!-- SIDEBAR FILTER -->
-                    <!-- ============================================ -->
                     <aside class="flex w-full shrink-0 flex-col gap-7 xl:w-[248px]">
 
                         <!-- Header Filter -->
@@ -131,16 +126,9 @@
                             </a>
                         </div>
                     </aside>
-
-                    <!-- ============================================ -->
-                    <!-- AREA KATALOG FONT -->
-                    <!-- ============================================ -->
                     <div class="flex min-w-0 w-full flex-1 flex-col gap-6">
-
-                        <!-- Live Preview Toolbar -->
                         <div
                             class="flex flex-col gap-4 rounded border border-[#E2E2E4] bg-[#F6F6F5] p-4 sm:flex-row sm:items-center">
-                            <!-- Input Teks Preview -->
                             <div class="flex min-w-0 flex-1 items-center gap-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -166,8 +154,6 @@
                                     aria-label="Ukuran teks pratinjau" />
                             </div>
                         </div>
-
-                        <!-- Catalog Information & Sorting -->
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div class="flex flex-col gap-1">
                                 <p class="text-[13px] font-semibold text-[#121214]">
@@ -193,15 +179,6 @@
                                 </select>
                             </div>
                         </div>
-
-                        <p v-if="cartFeedback" role="status" aria-live="polite"
-                            class="text-sm text-[#68686C]">
-                            {{ cartFeedback }}
-                        </p>
-
-                        <!-- ============================================ -->
-                        <!-- FONT CARDS -->
-                        <!-- ============================================ -->
                         <div v-if="filteredFonts.length > 0" class="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <article v-for="font in filteredFonts" :key="font.id"
                                 class="relative min-w-0 overflow-hidden rounded-lg border border-[#E2E2E4] transition-shadow hover:shadow-sm">
@@ -337,7 +314,6 @@
 import { defineComponent } from 'vue';
 import AppLayout from '@/components/layout/applayout.vue';
 import FontApi from '@/core/api/font/font.api';
-import { useCartStore } from '@/core/cart/cartStore';
 
 export default defineComponent({
     name: 'Catalog',
@@ -382,7 +358,6 @@ export default defineComponent({
 
             // Data array font akan diambil dari FontApi
             fonts: [],
-            cartFeedback: '',
         };
     },
 
@@ -499,34 +474,11 @@ export default defineComponent({
         },
 
         addToCart(font) {
-            const result = useCartStore().addFont(font);
-
-            if (result.added) {
-                this.cartFeedback = `${font.name} berhasil ditambahkan ke keranjang.`;
-            } else if (result.reason === 'duplicate') {
-                this.cartFeedback = `${font.name} sudah ada di keranjang.`;
-            } else {
-                this.cartFeedback = 'Font ini tidak tersedia untuk ditambahkan ke keranjang.';
-            }
+            console.log('Font ditambahkan ke keranjang:', font.name);
         },
 
         downloadFont(font) {
-            const file = font.files
-                ? Object.values(font.files).find(
-                    (value) => typeof value === 'string' && value.trim()
-                )
-                : null;
-
-            if (!file) {
-                this.cartFeedback = 'File font belum tersedia untuk diunduh.';
-                return;
-            }
-
-            const link = document.createElement('a');
-            link.href = file;
-            link.download = font.id;
-            link.click();
-            this.cartFeedback = '';
+            console.log('Permintaan unduh font:', font.name);
         },
     },
 });
