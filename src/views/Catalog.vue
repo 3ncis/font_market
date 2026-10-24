@@ -268,6 +268,10 @@
                                             Unduh Gratis
                                         </button>
                                     </div>
+                                    <p v-if="cartFeedbackFontId === font.id" role="status" aria-live="polite"
+                                        class="text-xs text-[#68686C]">
+                                        {{ cartFeedback }}
+                                    </p>
                                 </div>
                             </article>
                         </div>
@@ -314,6 +318,7 @@
 import { defineComponent } from 'vue';
 import AppLayout from '@/components/layout/applayout.vue';
 import FontApi from '@/core/api/font/font.api';
+import { useCartStore } from '@/core/cart/cartStore';
 
 export default defineComponent({
     name: 'Catalog',
@@ -358,6 +363,9 @@ export default defineComponent({
 
             // Data array font akan diambil dari FontApi
             fonts: [],
+            cartStore: useCartStore(),
+            cartFeedback: '',
+            cartFeedbackFontId: '',
         };
     },
 
@@ -474,7 +482,16 @@ export default defineComponent({
         },
 
         addToCart(font) {
-            console.log('Font ditambahkan ke keranjang:', font.name);
+            this.cartFeedbackFontId = font.id;
+
+            const result = this.cartStore.addFont(font.id);
+            if (result.added) {
+                this.cartFeedback = `${font.name} berhasil ditambahkan ke keranjang.`;
+            } else if (result.reason === 'duplicate') {
+                this.cartFeedback = `${font.name} sudah ada di keranjang.`;
+            } else {
+                this.cartFeedback = 'Font ini tidak tersedia untuk ditambahkan ke keranjang.';
+            }
         },
 
         downloadFont(font) {

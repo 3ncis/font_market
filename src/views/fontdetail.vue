@@ -1,5 +1,5 @@
 <template>
-  <Applayout>
+  <AppLayout>
     <!-- 1. Sedang memuat data -->
     <div v-if="isLoading" class="mx-auto w-full max-w-[1440px] px-4 py-24 sm:px-6 lg:px-20">
       <div class="h-10 w-72 animate-pulse rounded bg-[#EDE8DF]"></div>
@@ -208,18 +208,18 @@
         Kembali ke beranda
       </RouterLink>
     </div>
-  </Applayout>
+  </AppLayout>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import Applayout from '@/components/layout/applayout.vue';
+import AppLayout from '@/components/layout/applayout.vue';
 import ApiFont from '@/core/api/font/font.api'
 import { useCartStore } from '@/core/cart/cartStore';
 
 export default defineComponent({
   name: 'FontDetailView',
-  components: { Applayout },
+  components: { AppLayout },
   data() {
     return {
       fonts: [],
