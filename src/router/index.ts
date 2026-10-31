@@ -44,6 +44,12 @@ const routes = [
     meta: { title: 'Checkout' }
   },
   {
+    path: '/payment-confirmation',
+    name: 'payment-confirmation',
+    component: () => import('@/views/auth/PaymentConfirmation.vue'),
+    meta: { title: 'Konfirmasi Pembayaran' }
+  },
+  {
     // :id adalah parameter dinamis -> /font/sinerva, /font/swaraga, dst.
     path: '/collections',
     name: 'collections',

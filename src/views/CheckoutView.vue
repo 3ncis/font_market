@@ -83,7 +83,7 @@
           </svg>
 
           <span class="font-['Geist'] text-xs font-normal text-[#68686C]">
-            Pembayaran aman &amp; terenkripsi
+            Preview pembayaran · payment gateway belum terhubung
           </span>
         </div>
       </div>
@@ -345,7 +345,7 @@
           <button type="button" :disabled="!agreedToTerms || isSubmitting"
             class="flex h-12 w-full items-center justify-center gap-2.5 rounded border border-[#121214] bg-[#121214] px-5 font-['Geist'] text-sm font-semibold text-white transition-colors hover:bg-[#383735] disabled:cursor-not-allowed disabled:opacity-50"
             @click="proceedToPayment">
-            <span>Bayar {{ formatPrice(total) }}</span>
+            <span>{{ isSubmitting ? 'Membuka konfirmasi...' : `Lihat preview pembayaran · ${formatPrice(total)}` }}</span>
 
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"
               aria-hidden="true">
@@ -354,9 +354,13 @@
             </svg>
           </button>
 
+          <p v-if="navigationError" role="alert" class="font-['Geist'] text-xs text-[#9A3D32]">
+            {{ navigationError }}
+          </p>
+
           <p class="font-['Geist'] text-[11px] leading-[17px] text-[#68686C]">
-            Anda akan melanjutkan ke proses pembayaran melalui metode yang
-            dipilih. Tidak ada biaya layanan tambahan.
+            Halaman berikutnya menampilkan preview metode pembayaran. Pembayaran
+            nyata belum tersedia dan tidak ada biaya yang diproses.
           </p>
 
           <div class="h-px w-full bg-[#E2E2E4]"></div>
@@ -380,6 +384,7 @@
 <script>
 import AppLayout from '@/components/layout/applayout.vue';
 import { useCartStore } from '@/core/cart/cartStore';
+import { savePaymentPreview } from '@/core/payment/paymentPreview';
 
 export default {
   name: 'CheckoutView',
@@ -401,6 +406,7 @@ export default {
       paymentMethod: 'qris',
       agreedToTerms: false,
       isSubmitting: false,
+      navigationError: '',
       serviceFee: 0,
     };
   },
@@ -425,32 +431,15 @@ export default {
         {
           id: 'qris',
           name: 'QRIS',
-          description:
-            'Pindai dengan GoPay, OVO, DANA, ShopeePay, atau aplikasi bank.',
+          description: 'Preview instruksi QRIS. QR pembayaran asli memerlukan integrasi payment gateway.',
           badge: 'QR',
-          detail:
-            'Kode QR muncul setelah Anda menekan tombol pembayaran. Selesaikan pembayaran dalam 30 menit.',
+          detail: 'Preview QR akan ditampilkan setelah Anda melanjutkan. QR demo tidak dapat digunakan untuk membayar.',
         },
         {
           id: 'va',
           name: 'Transfer Virtual Account',
-          description:
-            'BCA, BNI, BRI, Mandiri, dan Permata · verifikasi otomatis.',
+          description: 'Preview kode Virtual Account. Nomor pembayaran asli memerlukan integrasi payment gateway.',
           badge: 'VA',
-        },
-        {
-          id: 'ewallet',
-          name: 'Dompet digital',
-          description:
-            'GoPay, OVO, atau DANA · lanjutkan melalui aplikasi Anda.',
-          badge: 'Rp',
-        },
-        {
-          id: 'card',
-          name: 'Kartu debit / kredit',
-          description:
-            'Visa & Mastercard · kartu berlogo yang didukung.',
-          badge: '••',
         },
       ];
     },
@@ -508,18 +497,30 @@ export default {
     },
 
     async proceedToPayment() {
-      if (!this.validateForm()) return;
+      if (this.isSubmitting || !this.validateForm()) return;
 
       this.isSubmitting = true;
+      this.navigationError = '';
 
       try {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-
-        alert(
-          'Formulir valid. Integrasi pembayaran belum tersedia. ' +
-          'Metode yang dipilih: ' +
-          this.paymentMethods.find((method) => method.id === this.paymentMethod)?.name,
-        );
+        savePaymentPreview({
+          paymentMethod: this.paymentMethod,
+          buyer: { ...this.buyer },
+          items: this.cartItems.map((item) => ({
+            id: item.id,
+            name: item.name,
+            price: Number(item.price || 0),
+            license: item.license,
+          })),
+          subtotal: this.subtotal,
+          serviceFee: this.serviceFee,
+          total: this.total,
+          createdAt: new Date().toISOString(),
+        });
+        await this.$router.push({ name: 'payment-confirmation' });
+      } catch (error) {
+        console.error('Gagal membuka halaman konfirmasi pembayaran:', error);
+        this.navigationError = 'Halaman konfirmasi pembayaran tidak dapat dibuka. Silakan coba kembali.';
       } finally {
         this.isSubmitting = false;
       }
