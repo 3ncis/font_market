@@ -114,10 +114,10 @@ export default defineComponent({
         </RouterLink>
 
         <RouterLink
-          :to="{ name: 'home' }"
+          :to="{ name: 'designer-search' }"
           class="text-sm font-normal text-[#68686C] transition-colors hover:text-[#121214]"
         >
-          Profil Desainer
+          Daftar Desainer
         </RouterLink>
       </div>
 

@@ -56,6 +56,19 @@ const routes = [
     component: () => import('@/views/Collections.vue'),
     meta: { title: 'Koleksi Saya' }
   },
+  {
+    // :id adalah parameter dinamis -> /font/sinerva, /font/swaraga, dst.
+    path: '/designer',
+    name: 'designer-search',
+    component: () => import('@/views/DesignerSearch.vue'),
+    meta: { title: 'Daftar Desainer' }
+  },
+  {
+    path: '/designer/:id',
+    name: 'designer-profile',
+    component: () => import('@/views/DesignerProfileView.vue'),
+    meta: { title: 'Profil Desainer' }
+  },
   // TODO: halaman berikutnya (login, 404) ditambahkan di sini
 ]
   // Halaman Auth (Tanpa Navbar/Footer Utama)
