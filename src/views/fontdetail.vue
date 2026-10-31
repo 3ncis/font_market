@@ -33,10 +33,37 @@
                   class="rounded-md border border-[#121214] bg-white px-6 py-3 font-['Geist'] text-sm font-semibold text-[#121214] transition-colors hover:bg-[#EDE8DF]">
                   Donasi Desainer
                 </button>
-                <button type="button"
+                <button v-if="isFree" type="button"
+                  class="inline-flex items-center gap-2 rounded-md bg-[#121214] px-6 py-3 font-['Geist'] text-sm font-semibold text-[#FAF8F5] transition-colors hover:bg-[#383735]"
+                  :disabled="isInCollection"
+                  :class="{ 'cursor-not-allowed opacity-60': isInCollection }"
+                  @click="addFreeFontToCollection">
+                  {{ isInCollection ? 'Sudah di Koleksi' : 'Tambah ke Koleksi' }}
+                  <svg v-if="!isInCollection" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 5v14" />
+                    <path d="M5 12h14" />
+                  </svg>
+                </button>
+                <button v-else type="button"
                   class="inline-flex items-center gap-2 rounded-md bg-[#121214] px-6 py-3 font-['Geist'] text-sm font-semibold text-[#FAF8F5] transition-colors hover:bg-[#383735]"
                   @click="handlePurchaseAction">
-                  {{ isFree ? 'Unduh Font (.OTF/.TTF)' : 'Beli Font ($' + font.price + ')' }}
+                  Beli Font (${{ font.price }})
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    aria-hidden="true">
+                    <path d="M12 3v12" />
+                    <path d="m7 10 5 5 5-5" />
+                    <path d="M5 21h14" />
+                  </svg>
+                </button>
+                <button v-if="isFree && isInCollection" type="button"
+                  class="inline-flex items-center gap-2 rounded-md border border-[#121214] bg-white px-6 py-3 font-['Geist'] text-sm font-semibold text-[#121214] transition-colors hover:bg-[#EDE8DF] disabled:cursor-not-allowed disabled:opacity-50"
+                  :disabled="!fontAsset"
+                  :title="fontAsset ? 'Unduh berkas font' : 'Berkas font belum tersedia'"
+                  @click="downloadFreeFont">
+                  Unduh Font
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     aria-hidden="true">
@@ -46,10 +73,20 @@
                   </svg>
                 </button>
               </div>
-              <p role="status" aria-live="polite"
-                class="h-4 w-full overflow-hidden text-ellipsis whitespace-nowrap font-['Geist'] text-xs text-[#68686C]">
-                {{ cartFeedback }}
-              </p>
+              <div class="flex flex-col gap-1">
+                <p role="status" aria-live="polite"
+                  class="min-h-4 w-full overflow-hidden text-ellipsis whitespace-nowrap font-['Geist'] text-xs text-[#68686C]">
+                  {{ cartFeedback }}
+                </p>
+                <p v-if="isFree && isInCollection && !fontAsset"
+                  class="font-['Geist'] text-xs text-[#8F897F]">
+                  Berkas font belum tersedia untuk diunduh.
+                </p>
+                <RouterLink v-if="isFree && isInCollection" to="/collections"
+                  class="w-fit font-['Geist'] text-xs font-medium text-[#68686C] underline underline-offset-4 transition hover:text-[#121214]">
+                  Lihat di Koleksi Saya
+                </RouterLink>
+              </div>
             </div>
           </div>
 
@@ -216,6 +253,9 @@ import { defineComponent } from 'vue'
 import AppLayout from '@/components/layout/applayout.vue';
 import ApiFont from '@/core/api/font/font.api'
 import { useCartStore } from '@/core/cart/cartStore';
+import { useCollectionStore } from '@/core/collection/collectionStore';
+import { useAuthStore } from '@/core/auth/authStores';
+import { getFontAsset } from '@/core/collection/fontAssets';
 
 export default defineComponent({
   name: 'FontDetailView',
@@ -225,6 +265,8 @@ export default defineComponent({
       fonts: [],
       isLoading: true,
       cartFeedback: '',
+      collectionStore: useCollectionStore(),
+      authStore: useAuthStore(),
 
       // State pratinjau (berubah saat user mengetik / geser slider)
       previewText: 'Karsa Luhur Bumi Khatulistiwa',
@@ -291,19 +333,62 @@ export default defineComponent({
     isFree() {
       return this.font ? this.font.price === 0 : false
     },
+    isInCollection() {
+      return this.font
+        ? this.collectionStore.items.some((item) => item.id === this.font.id)
+        : false
+    },
+    fontAsset() {
+      return this.font ? getFontAsset(this.font.id) : null
+    },
+    accountKey() {
+      const user = this.authStore.currentUser;
+      if (user?.id !== undefined && user?.id !== null) return `user-${user.id}`;
+      if (user?.email) return `email-${String(user.email).trim().toLowerCase()}`;
+      return 'guest';
+    },
     // Nama font dari JSON + cadangan serif kalau file font belum ada
     fontStack() {
       return this.font ? `'${this.font.fontFamily}', ${this.fallbackFamily}` : 'serif'
     },
   },
   methods: {
+    loadCollection(accountKey) {
+      try {
+        this.collectionStore.loadForAccount(accountKey);
+      } catch (error) {
+        console.error('Gagal memuat koleksi font:', error);
+        this.cartFeedback = 'Koleksi tidak dapat dimuat dari penyimpanan lokal.';
+      }
+    },
+    addFreeFontToCollection() {
+      if (!this.font || !this.isFree) return;
+
+      this.cartFeedback = '';
+      try {
+        const result = this.collectionStore.addFreeFont(this.font.id);
+        if (result.added) {
+          this.cartFeedback = `${this.font.name} berhasil ditambahkan ke Koleksi Saya.`;
+        } else if (result.reason === 'duplicate') {
+          this.cartFeedback = `${this.font.name} sudah ada di Koleksi Saya.`;
+        } else {
+          this.cartFeedback = 'Font ini tidak tersedia untuk ditambahkan ke koleksi.';
+        }
+      } catch (error) {
+        console.error('Gagal menambahkan font ke koleksi:', error);
+        this.cartFeedback = 'Font tidak dapat disimpan. Periksa ruang penyimpanan browser Anda.';
+      }
+    },
+    downloadFreeFont() {
+      if (!this.font || !this.isFree || !this.isInCollection || !this.fontAsset) return;
+
+      const link = document.createElement('a');
+      link.href = this.fontAsset.url;
+      link.download = this.fontAsset.filename;
+      link.click();
+    },
     handlePurchaseAction() {
       if (!this.font) return;
-
-      if (this.isFree) {
-        this.cartFeedback = 'File font untuk unduhan belum tersedia.';
-        return;
-      }
 
       const result = useCartStore().addFont(this.font);
       if (result.added) {
@@ -315,7 +400,13 @@ export default defineComponent({
       }
     },
   },
+  watch: {
+    accountKey(nextAccountKey) {
+      this.loadCollection(nextAccountKey);
+    },
+  },
   mounted() {
+    this.loadCollection(this.accountKey);
     ApiFont.getAll()
       .then((response) => {
         this.fonts = response
