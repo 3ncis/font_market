@@ -376,6 +376,7 @@ import { defineComponent } from 'vue';
 import { RouterLink } from 'vue-router';
 import AppLayout from '@/components/layout/applayout.vue';
 import { cartLicenseOptions, useCartStore } from '@/core/cart/cartStore';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'Cart',
@@ -417,6 +418,9 @@ export default defineComponent({
   },
 
   methods: {
+    getData(){
+        axios.get("http://192.168.1.15:8080")
+    },
     // Format angka menjadi mata uang Rupiah
     formatPrice(price) {
       return new Intl.NumberFormat('id-ID', {

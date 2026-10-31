@@ -1,4 +1,4 @@
-import fonts from '../../data/fonts.json';
+import fonts from '../../utils/fonts.json';
 
 class ApiFont {
     async getAll() {

@@ -11,7 +11,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
-    "axios": "^1.20.0",
+    "axios": "^1.21.0",
     "dotenv": "^18.0.6",
     "flatpickr": "^4.6.13",
     "pinia": "^4.0.3",
