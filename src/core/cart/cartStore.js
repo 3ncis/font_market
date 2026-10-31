@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import fonts from '../data/fonts.json';
+import fonts from '../utils/fonts.json';
 
 export const cartLicenseOptions = [
     'Desktop · 1 pengguna',
