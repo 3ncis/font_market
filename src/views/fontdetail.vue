@@ -1,14 +1,15 @@
 <template>
   <AppLayout>
     <!-- 1. Sedang memuat data -->
-    <div v-if="isLoading" class="mx-auto w-full max-w-[1440px] px-4 py-24 sm:px-6 lg:px-20">
+    <div v-if="isLoading" class="mx-auto w-full max-w-[1600px] px-4 py-24 sm:px-6 lg:px-20">
       <div class="h-10 w-72 animate-pulse rounded bg-[#EDE8DF]"></div>
     </div>
 
     <!-- 2. Font ditemukan -->
     <template v-else-if="font">
       <!-- ===== BAGIAN ATAS: judul, tombol, pratinjau ===== -->
-      <section class="w-full border-b border-[#D1C9B8] bg-[#FAF8F5] px-4 py-10 sm:px-6 sm:py-14 lg:px-20 lg:py-16">
+      <section class="w-full border-b border-[#D1C9B8] bg-[#FAF8F5]">
+        <div class="mx-auto w-full max-w-[1600px] px-4 py-10 sm:px-6 sm:py-14 lg:px-20 lg:py-16">
         <div class="mx-auto flex w-full max-w-[1440px] flex-col gap-8">
           <!-- Judul + tombol aksi -->
           <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
@@ -109,10 +110,12 @@
               :style="{ fontFamily: fontStack, fontSize: previewSize + 'px', lineHeight: 1.2 }" />
           </div>
         </div>
+        </div>
       </section>
 
       <!-- ===== BAGIAN BAWAH: 2 kolom ===== -->
-      <section class="w-full bg-[#FAF8F5] px-4 py-12 sm:px-6 sm:py-16 lg:px-20 lg:py-20">
+      <section class="w-full bg-[#FAF8F5]">
+        <div class="mx-auto w-full max-w-[1600px] px-4 py-12 sm:px-6 sm:py-16 lg:px-20 lg:py-20">
         <div class="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_405px] lg:gap-20">
           <!-- Kolom kiri: daftar style + glyph -->
           <div class="flex flex-col gap-16">
@@ -233,11 +236,12 @@
             </div>
           </aside>
         </div>
+        </div>
       </section>
     </template>
 
     <!-- 3. Font tidak ditemukan -->
-    <div v-else class="mx-auto w-full max-w-[1440px] px-4 py-24 text-center sm:px-6 lg:px-20">
+    <div v-else class="mx-auto w-full max-w-[1600px] px-4 py-24 text-center sm:px-6 lg:px-20">
       <p class="font-['Geist'] text-[#524E48]">
         Font dengan ID "{{ $route.params.id }}" tidak ditemukan.
       </p>

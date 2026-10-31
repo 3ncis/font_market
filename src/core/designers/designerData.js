@@ -114,7 +114,13 @@ export function getDesigners() {
                     locationMatch?.[1]?.trim() ||
                     null,
                 avatar: getMetadataValue(designerFonts, ['designerAvatar', 'avatar']),
+                banner: getMetadataValue(designerFonts, ['designerBanner', 'banner']),
                 biography: getMetadataValue(designerFonts, ['designerBiography', 'biography', 'bio']),
+                contacts: {
+                    instagram: getMetadataValue(designerFonts, ['designerInstagram', 'instagram']),
+                    website: getMetadataValue(designerFonts, ['designerWebsite', 'website']),
+                    email: getMetadataValue(designerFonts, ['designerEmail', 'email']),
+                },
                 activeFonts: getKnownActiveFontCount(designerFonts),
                 downloads: getStatistic(designerFonts, ['designerDownloads']),
                 appreciation: getStatistic(designerFonts, ['designerAppreciation']),

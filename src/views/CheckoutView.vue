@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <section class="flex w-full flex-col gap-6 overflow-hidden px-4 pb-9 pt-10 sm:px-6 lg:px-20">
+    <section class="mx-auto flex w-full max-w-[1600px] flex-col gap-6 overflow-hidden px-4 pb-9 pt-10 sm:px-6 lg:px-20">
       <!-- Breadcrumb & Checkout Progress -->
       <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <!-- Breadcrumb -->
@@ -89,7 +89,7 @@
       </div>
     </section>
     <section
-      class="flex w-full flex-col gap-10 overflow-hidden px-4 pb-16 pt-3 sm:px-6 lg:flex-row lg:items-start lg:gap-16 lg:px-20">
+      class="mx-auto flex w-full max-w-[1600px] flex-col gap-10 overflow-hidden px-4 pb-16 pt-3 sm:px-6 lg:flex-row lg:items-start lg:gap-16 lg:px-20">
       <!-- LEFT: BUYER FORM & PAYMENT METHODS -->
       <div class="flex min-w-0 flex-1 flex-col gap-9">
         <!-- 01 — DATA PEMBELI -->

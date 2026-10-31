@@ -1,6 +1,6 @@
 <template>
     <AppLayout>
-        <section class="flex flex-col gap-5 border-b border-[#E2E2E4] px-4 pb-9 pt-10 sm:px-6 lg:px-20 lg:pt-[52px]">
+        <section class="mx-auto flex w-full max-w-[1600px] flex-col gap-5 border-b border-[#E2E2E4] px-4 pb-9 pt-10 sm:px-6 lg:px-20 lg:pt-[52px]">
             <div class="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#68686C]">
                 Arsip Tipografi Nusantara / Koleksi Saya
             </div>
@@ -21,7 +21,7 @@
 
         <section class="flex flex-col">
             <div v-if="!isCollectionEmpty"
-                class="border-b border-[#E2E2E4] px-4 py-6 sm:px-6 lg:px-20 lg:py-9">
+                class="mx-auto w-full max-w-[1600px] border-b border-[#E2E2E4] px-4 py-6 sm:px-6 lg:px-20 lg:py-9">
                 <div class="flex h-[52px] items-center gap-3 rounded border border-[#E2E2E4] px-4">
                     <svg class="h-4 w-4 shrink-0 text-[#8F897F]" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col gap-8 px-4 pb-16 pt-8 sm:px-6 lg:flex-row lg:gap-10 lg:px-20 lg:pb-16 lg:pt-9">
+            <div class="mx-auto flex w-full max-w-[1600px] flex-col gap-8 px-4 pb-16 pt-8 sm:px-6 lg:flex-row lg:gap-10 lg:px-20 lg:pb-16 lg:pt-9">
                 <aside v-if="!isCollectionEmpty" class="w-full shrink-0 lg:w-[248px]">
                     <CollectionSidebar v-model:price="selectedPrice" v-model:categories="selectedCategories"
                         v-model:licenses="selectedLicenses" @reset="resetFilters" />

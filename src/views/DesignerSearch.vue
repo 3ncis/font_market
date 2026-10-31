@@ -1,7 +1,7 @@
 <template>
     <AppLayout>
         <section
-            class="flex flex-col gap-5 overflow-hidden border-b border-[#E2E2E4] px-4 pb-9 pt-10 sm:px-6 lg:px-20 lg:pt-[52px]">
+            class="mx-auto flex w-full max-w-[1600px] flex-col gap-5 overflow-hidden border-b border-[#E2E2E4] px-4 pb-9 pt-10 sm:px-6 lg:px-20 lg:pt-[52px]">
             <div class="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#68686C]">
                 Arsip Tipografi Nusantara / Daftar Desainer
             </div>
@@ -19,7 +19,7 @@
             </div>
         </section>
 
-        <section class="flex flex-col gap-6 px-4 pb-16 pt-9 sm:px-6 lg:px-20">
+        <section class="mx-auto flex w-full max-w-[1600px] flex-col gap-6 px-4 pb-16 pt-9 sm:px-6 lg:px-20">
             <label class="flex h-[52px] items-center gap-3 rounded border border-[#E2E2E4] px-4">
                 <svg class="h-[18px] w-[18px] shrink-0 text-[#121214]" viewBox="0 0 18 18" fill="none"
                     stroke="currentColor" stroke-width="1.5" aria-hidden="true">

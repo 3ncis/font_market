@@ -19,7 +19,7 @@ export default {
 </script>
 
 <template>
-    <section class="px-4 pb-16 pt-3 sm:px-6 lg:px-20">
+    <section class="mx-auto w-full max-w-[1600px] px-4 pb-16 pt-3 sm:px-6 lg:px-20">
         <div class="flex flex-col gap-6 rounded-lg border border-[#E2E2E4] p-6 sm:p-10">
             <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[#F6F6F5]">
                 <svg v-if="!isSuccess" class="h-7 w-7 text-[#121214]" viewBox="0 0 28 28" fill="none"

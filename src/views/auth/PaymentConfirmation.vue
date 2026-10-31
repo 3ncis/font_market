@@ -1,6 +1,6 @@
 <template>
     <AppLayout>
-        <section class="px-4 pb-9 pt-10 sm:px-6 lg:px-20 lg:pt-10">
+        <section class="mx-auto w-full max-w-[1600px] px-4 pb-9 pt-10 sm:px-6 lg:px-20 lg:pt-10">
             <p class="font-['Geist'] text-xs leading-[18.6px] text-[#68686C]">
                 Katalog font / Checkout / Konfirmasi
             </p>
@@ -8,7 +8,7 @@
 
         <PaymentStatus status="pending" />
 
-        <div v-if="paymentPreview && !showPaymentModal" class="-mt-10 px-4 pb-16 text-center sm:px-6 lg:px-20">
+        <div v-if="paymentPreview && !showPaymentModal" class="mx-auto -mt-10 w-full max-w-[1600px] px-4 pb-16 text-center sm:px-6 lg:px-20">
             <button type="button"
                 class="font-['Geist'] text-sm font-semibold text-[#68686C] underline underline-offset-4 transition hover:text-[#121214]"
                 @click="showPaymentModal = true">
@@ -17,7 +17,7 @@
         </div>
 
         <p v-if="loadError" role="alert"
-            class="mx-4 mb-8 rounded border border-[#D9A49D] bg-[#FFF8F6] px-4 py-3 font-['Geist'] text-sm text-[#9A3D32] sm:mx-6 lg:mx-20">
+            class="mx-auto mb-8 w-[calc(100%-2rem)] max-w-[1440px] rounded border border-[#D9A49D] bg-[#FFF8F6] px-4 py-3 font-['Geist'] text-sm text-[#9A3D32] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-10rem)]">
             {{ loadError }}
         </p>
 

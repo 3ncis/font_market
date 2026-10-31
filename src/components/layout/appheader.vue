@@ -71,7 +71,7 @@ export default defineComponent({
     ]"
   >
     <div
-      class="mx-auto flex min-h-[76px] w-full items-center justify-between gap-4 px-4 sm:px-6 lg:min-h-[90px] lg:px-20"
+      class="mx-auto flex min-h-[76px] w-full max-w-[1600px] items-center justify-between gap-4 px-4 sm:px-6 lg:min-h-[90px] lg:px-20"
     >
       <RouterLink :to="{ name: 'home' }" class="flex shrink-0 items-center gap-3">
         <div class="flex h-9 w-9 items-center justify-center overflow-hidden rounded-md bg-[#121214]">
