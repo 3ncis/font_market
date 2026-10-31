@@ -43,6 +43,13 @@ const routes = [
     component: () => import('@/views/CheckoutView.vue'),
     meta: { title: 'Checkout' }
   },
+  {
+    // :id adalah parameter dinamis -> /font/sinerva, /font/swaraga, dst.
+    path: '/collections',
+    name: 'collections',
+    component: () => import('@/views/Collections.vue'),
+    meta: { title: 'Koleksi Saya' }
+  },
   // TODO: halaman berikutnya (login, 404) ditambahkan di sini
 ]
   // Halaman Auth (Tanpa Navbar/Footer Utama)

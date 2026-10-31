@@ -123,7 +123,7 @@ export default defineComponent({
 
       <div class="flex shrink-0 items-center gap-3 sm:gap-[18px]">
         <RouterLink
-          :to="{ name: 'home' }"
+          :to="{ name: 'collections' }"
           class="hidden text-[13px] font-normal text-[#68686C] transition-colors hover:text-[#121214] sm:block"
         >
           Koleksi Saya
