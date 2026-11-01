@@ -1,7 +1,7 @@
 <template>
   <footer class="w-full bg-[#121214]">
     <div
-      class="mx-auto flex w-full max-w-[1440px] flex-col gap-12 px-4 pb-8 pt-12 sm:gap-14 sm:px-6 sm:pb-10 sm:pt-16 lg:gap-[60px] lg:px-20 lg:pb-10 lg:pt-20">
+      class="mx-auto flex w-full max-w-[1600px] flex-col gap-12 px-4 pb-8 pt-12 sm:gap-14 sm:px-6 sm:pb-10 sm:pt-16 lg:gap-[60px] lg:px-20 lg:pb-10 lg:pt-20">
       <!-- Main Footer Content -->
       <div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
         <!-- Brand Information -->

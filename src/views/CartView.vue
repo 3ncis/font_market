@@ -1,6 +1,6 @@
 <template>
     <AppLayout>
-        <section class="flex w-full flex-col gap-6 px-4 pb-8 pt-10 sm:px-6 sm:pt-12 lg:px-20 lg:pt-10">
+        <section class="mx-auto flex w-full max-w-[1600px] flex-col gap-6 px-4 pb-8 pt-10 sm:px-6 sm:pt-12 lg:px-20 lg:pt-10">
 
             <!-- BREADCRUMB & CHECKOUT PROGRESS -->
             <div class="flex w-full flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -91,7 +91,7 @@
 
         </section>
         <section
-            class="flex w-full flex-col gap-10 px-4 pb-16 pt-3 sm:px-6 lg:flex-row lg:items-start lg:gap-12 lg:px-20 lg:pb-[72px]">
+            class="mx-auto flex w-full max-w-[1600px] flex-col gap-10 px-4 pb-16 pt-3 sm:px-6 lg:flex-row lg:items-start lg:gap-12 lg:px-20 lg:pb-[72px]">
             <!-- LEFT: CART ITEMS -->
             <div class="flex min-w-0 flex-1 flex-col gap-6">
 

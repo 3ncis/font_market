@@ -2,7 +2,7 @@
     <AppLayout>
         <div class="flex flex-col gap-10">
             <section
-                class="flex w-full flex-col gap-5 border-b border-[#E2E2E4] px-4 pb-9 pt-10 sm:px-6 sm:pt-12 lg:px-20 lg:pt-[52px]">
+                class="mx-auto flex w-full max-w-[1600px] flex-col gap-5 border-b border-[#E2E2E4] px-4 pb-9 pt-10 sm:px-6 sm:pt-12 lg:px-20 lg:pt-[52px]">
                 <div class="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#68686C]">
                     Arsip tipografi Nusantara / Katalog font
                 </div>
@@ -41,7 +41,7 @@
                     </form>
                 </div>
             </section>
-            <section class="w-full px-4 py-9 sm:px-6 lg:px-20 lg:pb-16 lg:pt-9">
+            <section class="mx-auto w-full max-w-[1600px] px-4 py-9 sm:px-6 lg:px-20 lg:pb-16 lg:pt-9">
                 <div class="flex flex-col items-start gap-10 xl:flex-row">
                     <aside class="flex w-full shrink-0 flex-col gap-7 xl:w-[248px]">
 

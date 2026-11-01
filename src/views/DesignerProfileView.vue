@@ -1,15 +1,7 @@
 <template>
     <AppLayout>
-        <main class="mx-auto w-full max-w-[1440px]">
-            <section class="border-b border-[#E2E2E4] px-4 pb-8 pt-10 sm:px-6 lg:px-20 lg:pb-10 lg:pt-[52px]">
-                <nav aria-label="Breadcrumb" class="font-['Geist'] text-xs text-[#68686C]">
-                    <RouterLink :to="{ name: 'designer-search' }" class="transition hover:text-[#121214]">
-                        Daftar Desainer
-                    </RouterLink>
-                    <span class="mx-2">/</span>
-                    <span class="text-[#121214]">{{ designer?.name || 'Profil Desainer' }}</span>
-                </nav>
-            </section>
+        <main class="w-full pb-16">
+            <DesignerProfileBanner v-if="designer" :designer-name="designer.name" :image="designer.banner" />
 
             <section v-if="isLoading" role="status"
                 class="flex min-h-[440px] items-center justify-center px-6 py-12 font-['Geist'] text-sm text-[#68686C]">
@@ -140,7 +132,9 @@ export default {
 
     components: {
         AppLayout,
-        DesignerFontCard,
+        DesignerProfileBanner,
+        DesignerProfileCard,
+        DesignerPublishedFonts,
     },
 
     data() {
