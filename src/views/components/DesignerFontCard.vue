@@ -48,7 +48,16 @@
 </template>
 
 <script>
-import { getFontStyleCount } from '@/core/designers/designerData';
+function getFontStyleCount(font) {
+    if (Array.isArray(font.styles)) return font.styles.length;
+
+    for (const value of [font.styles, font.styleCount, font.stylesCount, font.weightCount]) {
+        const count = Number(value);
+        if (Number.isFinite(count) && count >= 0) return count;
+    }
+
+    return null;
+}
 
 export default {
     name: 'DesignerFontCard',

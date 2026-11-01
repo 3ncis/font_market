@@ -92,7 +92,7 @@ export default {
             return [
                 { label: 'Font aktif', value: this.designer.activeFonts },
                 { label: 'Unduhan', value: this.designer.downloads },
-                { label: 'Apresiasi', value: this.designer.appreciation },
+                { label: 'Rating', value: this.designer.rating },
             ];
         },
 
@@ -101,7 +101,10 @@ export default {
             if (fonts.length <= 3) return fonts;
 
             const activeFonts = fonts.filter((font) =>
-                font.isActive === true || font.active === true || font.status === 'active',
+                font.isActive === true ||
+                font.active === true ||
+                font.is_approved === true ||
+                font.status === 'active',
             );
             return (activeFonts.length ? activeFonts : fonts).slice(0, 3);
         },

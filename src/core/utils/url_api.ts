@@ -38,6 +38,10 @@ export const ApiEndpoints = {
     fonts: "/fonts",
     fontBySlug: (slug: string) => `/fonts/${encodeURIComponent(slug)}`,
     orders: "/orders",
+    designers: "/designer",
+    collection: "/collections",
+    collectionFontById: (fontId: string) =>
+        `/collections/${encodeURIComponent(fontId)}`,
     orderById: (id: string) => `/orders/${encodeURIComponent(id)}`,
     checkout: "/payments/checkout",
 } as const;

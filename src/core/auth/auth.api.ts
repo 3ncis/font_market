@@ -1,5 +1,6 @@
 import ApiServices from "@/core/services/ApiService";
 import { ApiEndpoints } from "../utils/url_api";
+import { readSuccessResponse } from "../utils/apiResponse";
 
 interface RegisterPayload {
     name: string;
@@ -7,40 +8,34 @@ interface RegisterPayload {
     password: string;
 }
 
-interface ApiResponse<T> {
-    data?: T;
-}
-
 class ApiAuth {
     async register({ name, email, password }: RegisterPayload): Promise<unknown> {
-        const response = await ApiServices.post<ApiResponse<unknown>>(
+        const response = await ApiServices.post(
             ApiEndpoints.register,
             { name, email, password },
         );
-        return response.data?.data;
+        return readSuccessResponse(response);
     }
 
     async registerDeveloper({ name, email, password }: RegisterPayload): Promise<unknown> {
-        const response = await ApiServices.post<ApiResponse<unknown>>(
+        const response = await ApiServices.post(
             ApiEndpoints.registerDeveloper,
             { name, email, password },
         );
-        return response.data?.data;
+        return readSuccessResponse(response);
     }
 
     async login(email: string, password: string): Promise<unknown> {
-        const response = await ApiServices.post<ApiResponse<unknown>>(
+        const response = await ApiServices.post(
             ApiEndpoints.login,
             { email, password },
         );
-        return response.data?.data;
+        return readSuccessResponse(response);
     }
 
     async getCurrentUser(): Promise<unknown> {
-        const response = await ApiServices.get<ApiResponse<unknown>>(
-            ApiEndpoints.currentUser,
-        );
-        return response.data?.data;
+        const response = await ApiServices.get(ApiEndpoints.currentUser);
+        return readSuccessResponse(response);
     }
 }
 

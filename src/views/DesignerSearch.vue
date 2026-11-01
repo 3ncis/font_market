@@ -46,7 +46,17 @@
                 </span>
             </div>
 
-            <div v-if="filteredDesigners.length"
+            <p v-if="isLoading" role="status"
+                class="py-12 text-center font-['Geist'] text-sm text-[#68686C]">
+                Memuat data desainer...
+            </p>
+
+            <p v-else-if="loadError" role="alert"
+                class="rounded border border-[#D9A49D] bg-[#FFF8F6] px-4 py-3 font-['Geist'] text-sm text-[#9A3D32]">
+                {{ loadError }}
+            </p>
+
+            <div v-else-if="filteredDesigners.length"
                 class="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
                 <DesignerCard v-for="designer in filteredDesigners" :key="designer.id" :designer="designer" />
             </div>
@@ -69,7 +79,7 @@
                             Tidak ada desainer atau studio yang cocok dengan “{{ searchQuery }}”. Coba nama lain.
                         </template>
                         <template v-else>
-                            Data font yang tersedia belum mencantumkan desainer.
+                            Data desainer dari database belum tersedia.
                         </template>
                     </p>
                 </div>
@@ -85,7 +95,7 @@
                     Tentang data direktori
                 </h3>
                 <p class="font-['Geist'] text-[13px] leading-[20.15px] text-[#68686C]">
-                    Profil dibentuk dengan mengelompokkan font berdasarkan nilai nama desainer yang sama persis.
+                    Profil dan daftar font ditampilkan berdasarkan data pengguna yang dikirim oleh database.
                     Studio, biografi, statistik, dan foto hanya ditampilkan jika tersedia pada data sumber.
                     Tanda “—” menunjukkan informasi yang belum tersedia, bukan nilai nol.
                 </p>
@@ -96,7 +106,8 @@
 
 <script>
 import AppLayout from '@/components/layout/applayout.vue';
-import { getDesigners } from '@/core/designers/designerData';
+import ApiDesigner from '@/core/api/designer.api';
+import { readErrorResponse } from '@/core/utils/apiResponse';
 import DesignerCard from './components/DesignerCard.vue';
 
 export default {
@@ -110,7 +121,9 @@ export default {
     data() {
         return {
             searchQuery: '',
-            designers: getDesigners(),
+            designers: [],
+            isLoading: false,
+            loadError: '',
         };
     },
 
@@ -136,7 +149,27 @@ export default {
         },
     },
 
+    created() {
+        this.loadDesigners();
+    },
+
     methods: {
+        async loadDesigners() {
+            this.isLoading = true;
+            this.loadError = '';
+            try {
+                this.designers = await ApiDesigner.getAllUserName();
+            } catch (error) {
+                console.error('Gagal memuat daftar desainer:', error);
+                this.loadError = readErrorResponse(
+                    error,
+                    'Daftar desainer tidak dapat dimuat dari database.',
+                );
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
         resetSearch() {
             this.searchQuery = '';
         },

@@ -47,7 +47,12 @@
                         {{ collectionError }}
                     </p>
 
-                    <div v-if="isCollectionEmpty"
+                    <p v-else-if="collectionLoading" role="status"
+                        class="py-12 text-center font-['Geist'] text-sm text-[#68686C]">
+                        Memuat koleksi...
+                    </p>
+
+                    <div v-else-if="isCollectionEmpty"
                         class="flex min-h-[440px] flex-col items-center justify-center rounded-lg border border-[#E2E2E4] px-6 py-12 text-center">
                         <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#F6F6F5]">
                             <svg class="h-7 w-7 text-[#8F897F]" viewBox="0 0 24 24" fill="none"
@@ -109,7 +114,7 @@
                         <CollectionNoResults v-else :search-query="searchQuery" @reset="resetFilters" />
 
                         <p class="border-t border-[#E2E2E4] pt-5 font-['Geist'] text-xs leading-relaxed text-[#8F897F]">
-                            Hanya font gratis yang dipilih secara eksplisit tersimpan pada koleksi lokal akun ini.
+                            Font gratis yang dipilih tersimpan pada koleksi akun Anda dan disinkronkan dengan database.
                             Font berbayar memerlukan catatan pembelian terverifikasi.
                         </p>
                     </template>
@@ -149,7 +154,11 @@
                     </p>
 
                     <div class="mt-4 max-h-[50vh] overflow-y-auto">
-                        <div v-if="availableFreeFonts.length" class="divide-y divide-[#E2E2E4]">
+                        <p v-if="availableFontsLoading" role="status"
+                            class="py-8 text-center font-['Geist'] text-sm text-[#68686C]">
+                            Memuat font...
+                        </p>
+                        <div v-else-if="availableFreeFonts.length" class="divide-y divide-[#E2E2E4]">
                             <article v-for="font in availableFreeFonts" :key="font.id"
                                 class="flex items-center justify-between gap-4 py-4">
                                 <div class="min-w-0">
@@ -162,7 +171,7 @@
                                 </div>
                                 <button type="button"
                                     class="h-9 shrink-0 rounded bg-[#121214] px-3 font-['Geist'] text-xs font-medium text-white hover:bg-[#343438]"
-                                    @click="addFont(font.id)">
+                                    @click="addFont(font)">
                                     Tambahkan
                                 </button>
                             </article>
@@ -190,7 +199,8 @@ import { defineComponent } from 'vue';
 import AppLayout from '@/components/layout/applayout.vue';
 import { useAuthStore } from '@/core/auth/authStores';
 import { useCollectionStore } from '@/core/collection/collectionStore';
-import fonts from '@/core/utils/fonts.json';
+import ApiFont from '@/core/api/font/font.api';
+import { readErrorResponse } from '@/core/utils/apiResponse';
 import CollectionSidebar from './components/CollectionSidebar.vue';
 import CollectionToolbar from './components/CollectionToolbar.vue';
 import CollectionFontCard from './components/CollectionFontCard.vue';
@@ -259,10 +269,13 @@ export default defineComponent({
             selectedPrice: 'all',
             selectedCategories: [],
             selectedLicenses: [],
+            availableFonts: [],
+            availableFontsLoading: false,
             showAddDialog: false,
             showRemoveModal: false,
             selectedFont: null,
             collectionError: '',
+            collectionLoading: false,
         };
     },
 
@@ -275,7 +288,7 @@ export default defineComponent({
         },
 
         isCollectionEmpty() {
-            return this.collectionStore.collectionFonts.length === 0;
+            return !this.collectionLoading && this.collectionStore.collectionFonts.length === 0;
         },
 
         collectionItems() {
@@ -314,8 +327,8 @@ export default defineComponent({
             const query = this.availableSearchQuery.trim().toLowerCase();
             const ownedIds = new Set(this.collectionStore.items.map((item) => item.id));
 
-            return fonts.filter((font) => {
-                if (Number(font.price) !== 0 || ownedIds.has(font.id)) return false;
+            return this.availableFonts.filter((font) => {
+                if (Number(font.price) !== 0 || ownedIds.has(String(font.id))) return false;
                 const searchableText = [font.name, font.designer, font.category]
                     .filter(Boolean)
                     .join(' ')
@@ -337,47 +350,54 @@ export default defineComponent({
         accountKey(nextAccountKey) {
             this.loadCollection(nextAccountKey);
         },
+        showAddDialog(isOpen) {
+            if (isOpen && !this.availableFonts.length) {
+                this.loadAvailableFonts();
+            }
+        },
     },
 
     created() {
-        this.loadCollection(this.accountKey);
-    },
-
-    mounted() {
-        window.addEventListener('storage', this.handleStorageChange);
-    },
-
-    beforeUnmount() {
-        window.removeEventListener('storage', this.handleStorageChange);
+        void this.loadCollection(this.accountKey);
     },
 
     methods: {
-        loadCollection(accountKey) {
+        async loadCollection(accountKey) {
             this.collectionError = '';
+            this.collectionLoading = true;
             try {
-                this.collectionStore.loadForAccount(accountKey);
+                await this.collectionStore.loadForAccount(accountKey);
             } catch (error) {
                 console.error('Gagal memuat koleksi font:', error);
-                this.collectionError = 'Koleksi tidak dapat dimuat dari penyimpanan lokal.';
+                this.collectionError = readErrorResponse(
+                    error,
+                    'Koleksi tidak dapat dimuat dari database.',
+                );
+            } finally {
+                this.collectionLoading = false;
             }
         },
 
-        handleStorageChange(event) {
-            if (event.key !== this.collectionStore.storageKey) return;
-
+        async loadAvailableFonts() {
+            this.collectionError = '';
+            this.availableFontsLoading = true;
             try {
-                this.collectionStore.reload();
-                this.collectionError = '';
+                this.availableFonts = await ApiFont.getAll();
             } catch (error) {
-                console.error('Gagal menyinkronkan koleksi font:', error);
-                this.collectionError = 'Perubahan koleksi dari tab lain tidak dapat dimuat.';
+                console.error('Gagal memuat daftar font:', error);
+                this.collectionError = readErrorResponse(
+                    error,
+                    'Daftar font tidak dapat dimuat dari database.',
+                );
+            } finally {
+                this.availableFontsLoading = false;
             }
         },
 
-        async addFont(fontId) {
+        async addFont(font) {
             this.collectionError = '';
             try {
-                const result = this.collectionStore.addFreeFont(fontId);
+                const result = await this.collectionStore.addFreeFont(font);
                 if (result.added) {
                     this.availableSearchQuery = '';
                     return;
@@ -388,7 +408,10 @@ export default defineComponent({
                     : 'Font tidak tersedia untuk ditambahkan ke koleksi.';
             } catch (error) {
                 console.error('Gagal menyimpan font ke koleksi:', error);
-                this.collectionError = 'Font tidak dapat disimpan. Periksa ruang penyimpanan browser Anda.';
+                this.collectionError = readErrorResponse(
+                    error,
+                    'Font tidak dapat disimpan ke database.',
+                );
             }
         },
 
@@ -405,7 +428,7 @@ export default defineComponent({
             this.selectedFont = null;
         },
 
-        confirmRemoveFont() {
+        async confirmRemoveFont() {
             if (!this.selectedFont || Number(this.selectedFont.price) !== 0) {
                 this.collectionError = 'Font ini tidak dapat dihapus dari koleksi.';
                 return;
@@ -413,7 +436,7 @@ export default defineComponent({
 
             this.collectionError = '';
             try {
-                const result = this.collectionStore.removeFreeFont(this.selectedFont.id);
+                const result = await this.collectionStore.removeFreeFont(this.selectedFont.id);
                 if (!result.removed) {
                     this.collectionError = 'Font tidak dapat dihapus dari koleksi.';
                     return;
@@ -422,7 +445,10 @@ export default defineComponent({
                 this.closeRemoveModal();
             } catch (error) {
                 console.error('Gagal menghapus font dari koleksi:', error);
-                this.collectionError = 'Font tidak dapat dihapus. Periksa ruang penyimpanan browser Anda.';
+                this.collectionError = readErrorResponse(
+                    error,
+                    'Font tidak dapat dihapus dari database.',
+                );
             }
         },
 

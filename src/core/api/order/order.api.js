@@ -1,15 +1,16 @@
 import ApiServices from "@/core/services/ApiService";
 import { ApiEndpoints } from "../../utils/url_api";
+import { readSuccessResponse } from "../../utils/apiResponse";
 
 class ApiOrder {
     async getAll() {
         const response = await ApiServices.get(ApiEndpoints.orders);
-        return response.data;
+        return readSuccessResponse(response);
     }
 
     async getById(id) {
         const response = await ApiServices.get(ApiEndpoints.orderById(id));
-        return response.data;
+        return readSuccessResponse(response);
     }
 
     async create(fontIds) {
@@ -26,7 +27,7 @@ class ApiOrder {
         const response = await ApiServices.post(ApiEndpoints.orders, {
             font_ids: fontIds,
         });
-        return response.data;
+        return readSuccessResponse(response);
     }
 }
 

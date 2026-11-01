@@ -1,5 +1,6 @@
 import ApiServices from "@/core/services/ApiService";
 import { ApiEndpoints } from "../../utils/url_api";
+import { readSuccessResponse } from "../../utils/apiResponse";
 import fontJson from "../../utils/fonts.json";
 
 function normalizeFont(font) {
@@ -43,21 +44,21 @@ class ApiFont {
         let page = 1;
         let totalPages = 1;
 
-        // do {
-        //     const response = await ApiServices.get(ApiEndpoints.fonts, {
-        //         params: { page, limit: 50 },
-        //     });
-        //     fonts.push(...readFontList(response));
+        do {
+            const response = await ApiServices.get(ApiEndpoints.fonts, {
+                params: { page, limit: 50 },
+            });
+            fonts.push(...readFontList(response));
 
-        //     const reportedPages = Number(response?.data?.meta?.total_pages ?? 1);
-        //     if (!Number.isInteger(reportedPages) || reportedPages < 0) {
-        //         throw new TypeError("The fonts API returned invalid pagination metadata.");
-        //     }
+            const reportedPages = Number(response?.data?.meta?.total_pages ?? 1);
+            if (!Number.isInteger(reportedPages) || reportedPages < 0) {
+                throw new TypeError("The fonts API returned invalid pagination metadata.");
+            }
 
-        //     totalPages = reportedPages;
-        //     page += 1;
-        // } while (page <= totalPages);
-        return fontJson;
+            totalPages = reportedPages;
+            page += 1;
+        } while (page <= totalPages);
+        return fonts;
     }
 
     async getByFilter(search = "", category = "all") {
@@ -80,7 +81,7 @@ class ApiFont {
 
     async getById(slug) {
         const response = await ApiServices.get(ApiEndpoints.fontBySlug(slug));
-        const font = response?.data?.data;
+        const font = readSuccessResponse(response);
 
         if (!font) {
             throw new TypeError("The font API response did not contain a font.");

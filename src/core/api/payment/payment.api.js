@@ -1,5 +1,6 @@
 import ApiServices from "@/core/services/ApiService";
 import { ApiEndpoints } from "../../utils/url_api";
+import { readSuccessResponse } from "../../utils/apiResponse";
 
 class ApiPayment {
     async createCheckout(orderId, paymentMethod) {
@@ -15,7 +16,7 @@ class ApiPayment {
             order_id: orderId,
             payment_method: paymentMethod,
         });
-        return response.data;
+        return readSuccessResponse(response);
     }
 }
 

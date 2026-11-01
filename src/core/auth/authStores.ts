@@ -29,9 +29,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function parseUser(value: unknown): PublicUser {
+    const userId = isRecord(value) ? value.id ?? value.user_id : undefined;
+
     if (
         !isRecord(value) ||
-        (typeof value.id !== "string" && typeof value.id !== "number") ||
+        (typeof userId !== "string" && typeof userId !== "number") ||
         typeof value.name !== "string" ||
         typeof value.email !== "string"
     ) {
@@ -39,7 +41,7 @@ function parseUser(value: unknown): PublicUser {
     }
 
     return {
-        id: value.id,
+        id: userId,
         name: value.name,
         email: value.email,
         ...(typeof value.role === "string" ? { role: value.role } : {}),

@@ -11,7 +11,24 @@
                 </nav>
             </section>
 
-            <section v-if="designer" class="flex flex-col gap-10 px-4 py-9 sm:px-6 lg:px-20 lg:py-12">
+            <section v-if="isLoading" role="status"
+                class="flex min-h-[440px] items-center justify-center px-6 py-12 font-['Geist'] text-sm text-[#68686C]">
+                Memuat profil desainer...
+            </section>
+
+            <section v-else-if="loadError" role="alert"
+                class="flex min-h-[440px] flex-col items-center justify-center px-6 py-12 text-center">
+                <h1 class="font-['Crimson_Pro'] text-3xl font-semibold text-[#121214]">
+                    Profil desainer tidak dapat dimuat.
+                </h1>
+                <p class="mt-3 font-['Geist'] text-sm text-[#68686C]">{{ loadError }}</p>
+                <button type="button" @click="loadDesigner"
+                    class="mt-6 inline-flex h-11 items-center justify-center rounded bg-[#121214] px-5 font-['Geist'] text-sm font-semibold text-white hover:bg-[#343438]">
+                    Coba lagi
+                </button>
+            </section>
+
+            <section v-else-if="designer" class="flex flex-col gap-10 px-4 py-9 sm:px-6 lg:px-20 lg:py-12">
                 <div class="flex flex-col items-center gap-6 rounded-lg border border-[#E2E2E4] p-6 text-center sm:p-10 md:flex-row md:text-left">
                     <div v-if="designer.avatar"
                         class="h-28 w-28 shrink-0 overflow-hidden rounded-full bg-[#F6F6F5] sm:h-36 sm:w-36">
@@ -101,7 +118,7 @@
                     Profil desainer tidak ditemukan.
                 </h1>
                 <p class="mt-3 font-['Geist'] text-sm text-[#68686C]">
-                    Desainer ini tidak tercatat dalam data font yang tersedia.
+                    Desainer ini tidak ditemukan di database.
                 </p>
                 <RouterLink :to="{ name: 'designer-search' }"
                     class="mt-6 inline-flex h-11 items-center justify-center rounded bg-[#121214] px-5 font-['Geist'] text-sm font-semibold text-white hover:bg-[#343438]">
@@ -114,7 +131,8 @@
 
 <script>
 import AppLayout from '@/components/layout/applayout.vue';
-import { getDesignerById } from '@/core/designers/designerData';
+import ApiDesigner from '@/core/api/designer.api';
+import { readErrorResponse } from '@/core/utils/apiResponse';
 import DesignerFontCard from './components/DesignerFontCard.vue';
 
 export default {
@@ -125,11 +143,15 @@ export default {
         DesignerFontCard,
     },
 
-    computed: {
-        designer() {
-            return getDesignerById(this.$route.params.id);
-        },
+    data() {
+        return {
+            designer: null,
+            isLoading: false,
+            loadError: '',
+        };
+    },
 
+    computed: {
         initials() {
             return this.designer?.name
                 .split(/\s+/)
@@ -143,12 +165,40 @@ export default {
             return [
                 { label: 'Font aktif', value: this.designer?.activeFonts },
                 { label: 'Unduhan', value: this.designer?.downloads },
-                { label: 'Apresiasi', value: this.designer?.appreciation },
+                { label: 'Rating', value: this.designer?.rating },
             ];
         },
     },
 
+    created() {
+        this.loadDesigner();
+    },
+
+    watch: {
+        '$route.params.id'() {
+            this.loadDesigner();
+        },
+    },
+
     methods: {
+        async loadDesigner() {
+            this.isLoading = true;
+            this.loadError = '';
+            this.designer = null;
+
+            try {
+                this.designer = await ApiDesigner.getById(String(this.$route.params.id));
+            } catch (error) {
+                console.error('Gagal memuat profil desainer:', error);
+                this.loadError = readErrorResponse(
+                    error,
+                    'Profil desainer tidak dapat dimuat dari database.',
+                );
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
         formatNumber(value) {
             return typeof value === 'number' && Number.isFinite(value)
                 ? new Intl.NumberFormat('id-ID').format(value)

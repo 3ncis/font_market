@@ -50,6 +50,12 @@ const routes = [
     meta: { title: 'Konfirmasi Pembayaran' }
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/auth/login.vue'),
+    meta: { title: 'Masuk Akun' }
+  },
+  {
     // :id adalah parameter dinamis -> /font/sinerva, /font/swaraga, dst.
     path: '/collections',
     name: 'collections',
@@ -69,15 +75,7 @@ const routes = [
     component: () => import('@/views/DesignerProfileView.vue'),
     meta: { title: 'Profil Desainer' }
   },
-  // TODO: halaman berikutnya (login, 404) ditambahkan di sini
 ]
-  // Halaman Auth (Tanpa Navbar/Footer Utama)
-//   {
-//     path: '/login',
-//     name: 'login',
-//     component: () => import('@/views/LoginView.vue'),
-//     meta: { title: 'Masuk Akun' }
-//   },
   // Catch-all route untuk 404 Not Found
 //   {
 //     path: '/:pathMatch(.*)*',

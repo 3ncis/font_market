@@ -23,6 +23,8 @@ ApiService.interceptors.request.use((config) => {
         requestPath === ApiEndpoints.currentUser ||
         requestPath === ApiEndpoints.orders ||
         requestPath?.startsWith(`${ApiEndpoints.orders}/`) ||
+        requestPath === ApiEndpoints.collection ||
+        requestPath?.startsWith(`${ApiEndpoints.collection}/`) ||
         requestPath === ApiEndpoints.checkout;
     const token = JwtService.getToken();
 

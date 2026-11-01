@@ -35,10 +35,10 @@
                 </button>
                 <button v-if="isFree" type="button"
                   class="inline-flex items-center gap-2 rounded-md bg-[#121214] px-6 py-3 font-['Geist'] text-sm font-semibold text-[#FAF8F5] transition-colors hover:bg-[#383735]"
-                  :disabled="isInCollection"
+                  :disabled="isInCollection || isCollectionUpdating"
                   :class="{ 'cursor-not-allowed opacity-60': isInCollection }"
                   @click="addFreeFontToCollection">
-                  {{ isInCollection ? 'Sudah di Koleksi' : 'Tambah ke Koleksi' }}
+                  {{ isInCollection ? 'Sudah di Koleksi' : isCollectionUpdating ? 'Menyimpan...' : 'Tambah ke Koleksi' }}
                   <svg v-if="!isInCollection" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -256,6 +256,7 @@ import { useCartStore } from '@/core/cart/cartStore';
 import { useCollectionStore } from '@/core/collection/collectionStore';
 import { useAuthStore } from '@/core/auth/authStores';
 import { getFontAsset } from '@/core/collection/fontAssets';
+import { readErrorResponse } from '@/core/utils/apiResponse';
 
 export default defineComponent({
   name: 'FontDetailView',
@@ -265,6 +266,7 @@ export default defineComponent({
       fonts: [],
       isLoading: true,
       cartFeedback: '',
+      isCollectionUpdating: false,
       collectionStore: useCollectionStore(),
       authStore: useAuthStore(),
 
@@ -353,20 +355,21 @@ export default defineComponent({
     },
   },
   methods: {
-    loadCollection(accountKey) {
+    async loadCollection(accountKey) {
       try {
-        this.collectionStore.loadForAccount(accountKey);
+        await this.collectionStore.loadForAccount(accountKey);
       } catch (error) {
         console.error('Gagal memuat koleksi font:', error);
-        this.cartFeedback = 'Koleksi tidak dapat dimuat dari penyimpanan lokal.';
+        this.cartFeedback = readErrorResponse(error, 'Koleksi tidak dapat dimuat dari database.');
       }
     },
-    addFreeFontToCollection() {
+    async addFreeFontToCollection() {
       if (!this.font || !this.isFree) return;
 
       this.cartFeedback = '';
+      this.isCollectionUpdating = true;
       try {
-        const result = this.collectionStore.addFreeFont(this.font.id);
+        const result = await this.collectionStore.addFreeFont(this.font);
         if (result.added) {
           this.cartFeedback = `${this.font.name} berhasil ditambahkan ke Koleksi Saya.`;
         } else if (result.reason === 'duplicate') {
@@ -376,7 +379,9 @@ export default defineComponent({
         }
       } catch (error) {
         console.error('Gagal menambahkan font ke koleksi:', error);
-        this.cartFeedback = 'Font tidak dapat disimpan. Periksa ruang penyimpanan browser Anda.';
+        this.cartFeedback = readErrorResponse(error, 'Font tidak dapat disimpan ke database.');
+      } finally {
+        this.isCollectionUpdating = false;
       }
     },
     downloadFreeFont() {
@@ -406,7 +411,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.loadCollection(this.accountKey);
+    void this.loadCollection(this.accountKey);
     ApiFont.getAll()
       .then((response) => {
         this.fonts = response
