@@ -384,7 +384,7 @@
 <script>
 import AppLayout from '@/components/layout/applayout.vue';
 import { useCartStore } from '@/core/cart/cartStore';
-import { savePaymentPreview } from '@/core/payment/paymentPreview';
+import { usePaymentPreviewStore } from '@/core/payment/paymentPreview';
 
 export default {
   name: 'CheckoutView',
@@ -396,6 +396,7 @@ export default {
   data() {
     return {
       cartStore: useCartStore(),
+      paymentPreviewStore: usePaymentPreviewStore(),
       buyer: {
         fullName: '',
         email: '',
@@ -409,6 +410,15 @@ export default {
       navigationError: '',
       serviceFee: 0,
     };
+  },
+
+  async mounted() {
+    try {
+      await this.cartStore.loadFonts();
+    } catch (error) {
+      console.error('Gagal memuat font untuk checkout:', error);
+      this.navigationError = 'Daftar font tidak dapat dimuat. Silakan coba kembali.';
+    }
   },
 
   computed: {
@@ -503,7 +513,7 @@ export default {
       this.navigationError = '';
 
       try {
-        savePaymentPreview({
+        this.paymentPreviewStore.setPreview({
           paymentMethod: this.paymentMethod,
           buyer: { ...this.buyer },
           items: this.cartItems.map((item) => ({

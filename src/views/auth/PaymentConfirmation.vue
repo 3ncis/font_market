@@ -250,7 +250,7 @@
 import AppLayout from '@/components/layout/applayout.vue';
 import {
     createDemoQrSvg,
-    loadPaymentPreview,
+    usePaymentPreviewStore,
 } from '@/core/payment/paymentPreview';
 import PaymentStatus from '@/views/components/PaymentStatus.vue';
 
@@ -264,7 +264,7 @@ export default {
 
     data() {
         return {
-            paymentPreview: null,
+            paymentPreviewStore: usePaymentPreviewStore(),
             showPaymentModal: false,
             showCloseConfirmation: false,
             loadError: '',
@@ -275,6 +275,10 @@ export default {
     },
 
     computed: {
+        paymentPreview() {
+            return this.paymentPreviewStore.preview;
+        },
+
         paymentMethodTitle() {
             return this.paymentPreview?.paymentMethod === 'va'
                 ? 'Transfer Virtual Account'
@@ -294,11 +298,8 @@ export default {
     methods: {
         loadPreview() {
             this.loadError = '';
-            try {
-                this.paymentPreview = loadPaymentPreview();
-                this.showPaymentModal = Boolean(this.paymentPreview);
-            } catch (error) {
-                console.error('Gagal memuat preview pembayaran:', error);
+            this.showPaymentModal = Boolean(this.paymentPreview);
+            if (!this.paymentPreview) {
                 this.loadError = 'Data preview pembayaran tidak dapat dimuat. Kembali ke checkout dan coba lagi.';
             }
         },

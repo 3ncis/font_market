@@ -1,26 +1,16 @@
-export const paymentPreviewStorageKey = 'aksaranusa-payment-preview';
+import { defineStore } from 'pinia';
 
-export function savePaymentPreview(preview) {
-    window.sessionStorage.setItem(paymentPreviewStorageKey, JSON.stringify(preview));
-}
+export const usePaymentPreviewStore = defineStore('paymentPreview', {
+    state: () => ({
+        preview: null,
+    }),
 
-export function loadPaymentPreview() {
-    const storedPreview = window.sessionStorage.getItem(paymentPreviewStorageKey);
-    if (!storedPreview) return null;
-
-    const preview = JSON.parse(storedPreview);
-    if (
-        !preview ||
-        !['qris', 'va'].includes(preview.paymentMethod) ||
-        !preview.buyer ||
-        !Array.isArray(preview.items) ||
-        !preview.items.length
-    ) {
-        throw new Error('Data preview pembayaran tidak valid.');
-    }
-
-    return preview;
-}
+    actions: {
+        setPreview(preview) {
+            this.preview = preview;
+        },
+    },
+});
 
 export function createDemoQrSvg() {
     const modules = [

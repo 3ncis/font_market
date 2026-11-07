@@ -241,6 +241,11 @@
     </template>
 
     <!-- 3. Font tidak ditemukan -->
+    <div v-else-if="fontLoadError" role="alert"
+      class="mx-auto w-full max-w-[1600px] px-4 py-24 text-center text-[#9A3D32] sm:px-6 lg:px-20">
+      {{ fontLoadError }}
+    </div>
+
     <div v-else class="mx-auto w-full max-w-[1600px] px-4 py-24 text-center sm:px-6 lg:px-20">
       <p class="font-['Geist'] text-[#524E48]">
         Font dengan ID "{{ $route.params.id }}" tidak ditemukan.
@@ -269,6 +274,7 @@ export default defineComponent({
     return {
       fonts: [],
       isLoading: true,
+      fontLoadError: '',
       cartFeedback: '',
       isCollectionUpdating: false,
       collectionStore: useCollectionStore(),
@@ -396,16 +402,21 @@ export default defineComponent({
       link.download = this.fontAsset.filename;
       link.click();
     },
-    handlePurchaseAction() {
+    async handlePurchaseAction() {
       if (!this.font) return;
 
-      const result = useCartStore().addFont(this.font);
-      if (result.added) {
-        this.cartFeedback = `${this.font.name} berhasil ditambahkan ke keranjang.`;
-      } else if (result.reason === 'duplicate') {
-        this.cartFeedback = `${this.font.name} sudah ada di keranjang.`;
-      } else {
-        this.cartFeedback = 'Font ini tidak tersedia untuk ditambahkan ke keranjang.';
+      try {
+        const result = await useCartStore().addFont(this.font);
+        if (result.added) {
+          this.cartFeedback = `${this.font.name} berhasil ditambahkan ke keranjang.`;
+        } else if (result.reason === 'duplicate') {
+          this.cartFeedback = `${this.font.name} sudah ada di keranjang.`;
+        } else {
+          this.cartFeedback = 'Font ini tidak tersedia untuk ditambahkan ke keranjang.';
+        }
+      } catch (error) {
+        console.error('Gagal memuat font untuk keranjang:', error);
+        this.cartFeedback = 'Font tidak dapat ditambahkan karena data gagal dimuat.';
       }
     },
   },
@@ -418,7 +429,12 @@ export default defineComponent({
     void this.loadCollection(this.accountKey);
     ApiFont.getAll()
       .then((response) => {
-        this.fonts = response
+        this.fonts = response;
+        useCartStore().setFonts(response);
+      })
+      .catch((error) => {
+        console.error('Gagal memuat detail font:', error);
+        this.fontLoadError = 'Data font tidak dapat dimuat. Silakan coba kembali.';
       })
       .finally(() => {
         this.isLoading = false

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Font lokal: nama di font-family harus sama dengan field "fontFamily" di fonts.json */
+/* Font lokal: family name harus cocok dengan data font yang diterima dari API. */
 @font-face {
   font-family: 'Sinerva';
   src: url('../fonts/Sinerva.otf');

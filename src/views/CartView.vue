@@ -95,6 +95,11 @@
             <!-- LEFT: CART ITEMS -->
             <div class="flex min-w-0 flex-1 flex-col gap-6">
 
+                <p v-if="cartLoadError" role="alert"
+                    class="rounded border border-[#D9A49D] bg-[#FFF8F6] px-4 py-3 text-sm text-[#9A3D32]">
+                    {{ cartLoadError }}
+                </p>
+
                 <!-- TABLE HEADER -->
                 <div class="flex items-center justify-between border-b border-[#E2E2E4] pb-3">
                     <span class="font-mono text-[11px] font-semibold uppercase tracking-wide text-[#68686C]">
@@ -226,7 +231,7 @@
                 </div>
 
                 <!-- FREE FONT INFORMATION -->
-                <div class="flex flex-col gap-[14px] rounded-lg bg-[#F6F6F5] p-5 sm:p-6">
+                <div v-if="freeFont" class="flex flex-col gap-[14px] rounded-lg bg-[#F6F6F5] p-5 sm:p-6">
 
                     <!-- NOTICE -->
                     <div class="flex items-center gap-3">
@@ -376,7 +381,6 @@ import { defineComponent } from 'vue';
 import { RouterLink } from 'vue-router';
 import AppLayout from '@/components/layout/applayout.vue';
 import { cartLicenseOptions, useCartStore } from '@/core/cart/cartStore';
-import axios from 'axios';
 
 export default defineComponent({
   name: 'Cart',
@@ -391,8 +395,18 @@ export default defineComponent({
       cartStore: useCartStore(),
       licenseOptions: cartLicenseOptions,
       downloadMessage: '',
+      cartLoadError: '',
       serviceFee: 0,
     };
+  },
+
+  async mounted() {
+    try {
+      await this.cartStore.loadFonts();
+    } catch (error) {
+      console.error('Gagal memuat font keranjang:', error);
+      this.cartLoadError = 'Daftar font tidak dapat dimuat. Silakan muat ulang halaman.';
+    }
   },
 
   computed: {
@@ -418,9 +432,6 @@ export default defineComponent({
   },
 
   methods: {
-    getData(){
-        axios.get("http://192.168.1.15:8080")
-    },
     // Format angka menjadi mata uang Rupiah
     formatPrice(price) {
       return new Intl.NumberFormat('id-ID', {

@@ -1,7 +1,6 @@
 import ApiServices from "@/core/services/ApiService";
 import { ApiEndpoints } from "../../utils/url_api";
 import { readSuccessResponse } from "../../utils/apiResponse";
-import fontJson from "../../utils/fonts.json";
 
 function normalizeFont(font) {
     if (!font || typeof font !== "object") {
