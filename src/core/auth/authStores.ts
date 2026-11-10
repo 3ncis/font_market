@@ -3,13 +3,14 @@ import { defineStore } from "pinia";
 import AuthApi from "@/core/auth/auth.api";
 import JwtService from "@/core/services/jwtService";
 
-type UserRole = "admin" | "buyer" | "seller" | string;
+type UserRole = "admin" | "buyer" | "creator" | "customer" | string;
 
 interface PublicUser {
     id: string | number;
     name: string;
     email: string;
     role?: UserRole;
+    roles?: UserRole[];
     created_at?: string;
     updated_at?: string;
 }
@@ -40,11 +41,20 @@ function parseUser(value: unknown): PublicUser {
         throw new TypeError("The authentication API returned an invalid user profile.");
     }
 
+    const normalizeRole = (role: string): UserRole =>
+        ["developer", "designer", "seller"].includes(role.toLowerCase())
+            ? "creator"
+            : role;
+
     return {
         id: userId,
         name: value.name,
         email: value.email,
-        ...(typeof value.role === "string" ? { role: value.role } : {}),
+        ...(typeof value.role === "string" ? { role: normalizeRole(value.role) } : {}),
+        ...(Array.isArray(value.roles) &&
+        value.roles.every((role) => typeof role === "string")
+            ? { roles: value.roles.map(normalizeRole) }
+            : {}),
         ...(typeof value.created_at === "string"
             ? { created_at: value.created_at }
             : {}),
@@ -69,6 +79,15 @@ function parseAuthResult(value: unknown): AuthResult {
     };
 }
 
+function hasRole(user: PublicUser | null, ...roles: string[]): boolean {
+    const assignedRoles = [user?.role, ...(user?.roles ?? [])];
+    return assignedRoles.some(
+        (role) =>
+            typeof role === "string" &&
+            roles.includes(role.trim().toLowerCase()),
+    );
+}
+
 function getErrorStatus(error: unknown): number | undefined {
     if (!isRecord(error) || !isRecord(error.response)) {
         return undefined;
@@ -88,11 +107,10 @@ export const useAuthStore = defineStore("auth", {
     getters: {
         isAuthenticated: (state) => Boolean(state.token),
         currentUser: (state) => state.user,
-        user: (state) => state.user,
         userRole: (state) => state.user?.role ?? null,
-        isAdmin: (state) => state.user?.role === "admin",
-        isBuyer: (state) => state.user?.role === "buyer",
-        isSeller: (state) => state.user?.role === "seller",
+        isAdmin: (state) => hasRole(state.user, "admin"),
+        isBuyer: (state) => hasRole(state.user, "buyer"),
+        isCreator: (state) => hasRole(state.user, "creator"),
     },
 
     actions: {
@@ -102,7 +120,9 @@ export const useAuthStore = defineStore("auth", {
             this.user = user;
             this.token = token;
 
-            if (user.role === "admin" || user.role === "seller") {
+            if (hasRole(user, "admin")) {
+                void router.push({ name: "admin-users" });
+            } else if (hasRole(user, "creator")) {
                 void router.push("#");
             } else {
                 void router.push("/");
@@ -116,8 +136,8 @@ export const useAuthStore = defineStore("auth", {
             return this.applyAuth(result);
         },
 
-        async registerDeveloper(name: string, email: string, password: string) {
-            const result: unknown = await AuthApi.registerDeveloper({
+        async registerCreator(name: string, email: string, password: string) {
+            const result: unknown = await AuthApi.registerCreator({
                 name,
                 email,
                 password,

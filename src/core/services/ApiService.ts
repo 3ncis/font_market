@@ -25,7 +25,8 @@ ApiService.interceptors.request.use((config) => {
         requestPath?.startsWith(`${ApiEndpoints.orders}/`) ||
         requestPath === ApiEndpoints.collection ||
         requestPath?.startsWith(`${ApiEndpoints.collection}/`) ||
-        requestPath === ApiEndpoints.checkout;
+        requestPath === ApiEndpoints.checkout ||
+        requestPath?.startsWith("/admin/");
     const token = JwtService.getToken();
 
     if (requiresAuthentication && token) {

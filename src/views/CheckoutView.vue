@@ -359,8 +359,8 @@
           </p>
 
           <p class="font-['Geist'] text-[11px] leading-[17px] text-[#68686C]">
-            Halaman berikutnya menampilkan preview metode pembayaran. Pembayaran
-            nyata belum tersedia dan tidak ada biaya yang diproses.
+            Pesanan dan payment pending dibuat di backend. Integrasi gateway
+            pembayaran nyata belum tersedia.
           </p>
 
           <div class="h-px w-full bg-[#E2E2E4]"></div>
@@ -385,6 +385,60 @@
 import AppLayout from '@/components/layout/applayout.vue';
 import { useCartStore } from '@/core/cart/cartStore';
 import { usePaymentPreviewStore } from '@/core/payment/paymentPreview';
+import ApiOrder from '@/core/api/order/order.api';
+import ApiPayment from '@/core/api/payment/payment.api';
+
+const objectIdPattern = /^[a-f\d]{24}$/i;
+
+function getErrorStatus(error) {
+  const status = error?.response?.status;
+  return Number.isInteger(status) ? status : undefined;
+}
+
+function getCheckoutErrorMessage(error) {
+  const status = getErrorStatus(error);
+  if (status === 400) return 'Data pesanan atau metode pembayaran tidak valid.';
+  if (status === 401 || status === 403) return 'Sesi Anda tidak dapat digunakan. Silakan masuk kembali.';
+  if (status === 404 || status === 410) return 'Pesanan tidak ditemukan atau sudah berakhir. Silakan coba kembali.';
+  if (status === 409) return 'Font sudah dimiliki, sedang dipesan, atau pesanan tidak lagi tersedia.';
+  if (status === 500) return 'Layanan sedang bermasalah. Silakan coba kembali beberapa saat lagi.';
+  if (
+    error?.request ||
+    error?.code === 'ERR_NETWORK' ||
+    error?.code === 'ECONNABORTED'
+  ) {
+    return 'Koneksi ke layanan pembayaran gagal. Periksa jaringan lalu coba kembali.';
+  }
+  if (!error?.response) return 'Respons layanan tidak dapat diproses. Silakan coba kembali.';
+  return 'Pesanan tidak dapat dibuat. Silakan coba kembali.';
+}
+
+function getOrderExpiry(order, checkoutPayment = null) {
+  const expiryValues = [
+    order?.expired_at,
+    order?.payment?.expired_at,
+    checkoutPayment?.expired_at,
+  ]
+    .filter((value) => typeof value === 'string')
+    .map(Date.parse)
+    .filter(Number.isFinite);
+
+  if (expiryValues.length === 0) {
+    throw new TypeError('The order API did not return a valid expiration time.');
+  }
+
+  return new Date(Math.min(...expiryValues)).toISOString();
+}
+
+function isBackendOrder(value) {
+  return value &&
+    typeof value === 'object' &&
+    typeof value.id === 'string' &&
+    objectIdPattern.test(value.id) &&
+    value.payment &&
+    typeof value.payment.id === 'string' &&
+    objectIdPattern.test(value.payment.id);
+}
 
 export default {
   name: 'CheckoutView',
@@ -513,7 +567,7 @@ export default {
       this.navigationError = '';
 
       try {
-        this.paymentPreviewStore.setPreview({
+        const paymentPreview = {
           paymentMethod: this.paymentMethod,
           buyer: { ...this.buyer },
           items: this.cartItems.map((item) => ({
@@ -526,11 +580,107 @@ export default {
           serviceFee: this.serviceFee,
           total: this.total,
           createdAt: new Date().toISOString(),
+        };
+        const fontIds = paymentPreview.items.map((item) => item.id);
+        const backendPaymentMethod = this.paymentMethod === 'va'
+          ? 'bank_transfer'
+          : this.paymentMethod;
+        const savedOrder = this.paymentPreviewStore.pendingOrder;
+        let order = null;
+        let serverTimeOffsetMs = 0;
+
+        if (
+          savedOrder &&
+          savedOrder.paymentMethod === backendPaymentMethod &&
+          savedOrder.fontIds.length === fontIds.length &&
+          savedOrder.fontIds.every((id, index) => id === fontIds[index])
+        ) {
+          try {
+            order = await ApiOrder.getById(savedOrder.orderId);
+            serverTimeOffsetMs = savedOrder.serverTimeOffsetMs;
+            if (!isBackendOrder(order)) {
+              throw new TypeError('The order API returned an invalid order.');
+            }
+
+            if (
+              order.status === 'success' &&
+              order.payment.gateway_status === 'success'
+            ) {
+              this.paymentPreviewStore.setPreview(paymentPreview);
+              try {
+                await this.cartStore.clearCatalogAfterPayment();
+              } catch (error) {
+                console.error('Catalog gagal dibersihkan setelah payment sukses:', error);
+              }
+              await this.$router.push({ name: 'payment-confirmation' });
+              return;
+            }
+
+            if (
+              order.status !== 'pending' ||
+              order.payment.gateway_status !== 'pending' ||
+              Date.parse(getOrderExpiry(order)) <= Date.now() + serverTimeOffsetMs
+            ) {
+              this.paymentPreviewStore.clearPendingOrder();
+              order = null;
+            }
+          } catch (error) {
+            if (![404, 410].includes(getErrorStatus(error))) throw error;
+            this.paymentPreviewStore.clearPendingOrder();
+            order = null;
+          }
+        }
+
+        if (!order) {
+          const requestStartedAt = Date.now();
+          order = await ApiOrder.create(fontIds, backendPaymentMethod);
+          const responseReceivedAt = Date.now();
+          if (!isBackendOrder(order)) {
+            throw new TypeError('The order API returned an invalid order.');
+          }
+
+          const createdAt = Date.parse(order.created_at);
+          if (Number.isFinite(createdAt)) {
+            serverTimeOffsetMs =
+              createdAt - (requestStartedAt + responseReceivedAt) / 2;
+          }
+
+          this.paymentPreviewStore.setPendingOrder({
+            orderId: order.id,
+            paymentId: order.payment.id,
+            expiredAt: getOrderExpiry(order),
+            paymentMethod: backendPaymentMethod,
+            fontIds,
+            serverTimeOffsetMs,
+          });
+        }
+
+        this.paymentPreviewStore.setPreview(paymentPreview);
+        const checkout = await ApiPayment.createCheckout(
+          order.id,
+          backendPaymentMethod,
+        );
+        if (
+          !checkout ||
+          typeof checkout !== 'object' ||
+          !checkout.payment ||
+          checkout.payment.id !== order.payment.id
+        ) {
+          throw new TypeError('The checkout API returned an invalid payment.');
+        }
+
+        this.paymentPreviewStore.setPendingOrder({
+          orderId: order.id,
+          paymentId: checkout.payment.id,
+          expiredAt: getOrderExpiry(order, checkout.payment),
+          paymentMethod: backendPaymentMethod,
+          fontIds,
+          serverTimeOffsetMs,
         });
         await this.$router.push({ name: 'payment-confirmation' });
       } catch (error) {
         console.error('Gagal membuka halaman konfirmasi pembayaran:', error);
-        this.navigationError = 'Halaman konfirmasi pembayaran tidak dapat dibuka. Silakan coba kembali.';
+        this.navigationError = getCheckoutErrorMessage(error);
       } finally {
         this.isSubmitting = false;
       }

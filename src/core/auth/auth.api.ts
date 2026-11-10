@@ -17,9 +17,9 @@ class ApiAuth {
         return readSuccessResponse(response);
     }
 
-    async registerDeveloper({ name, email, password }: RegisterPayload): Promise<unknown> {
+    async registerCreator({ name, email, password }: RegisterPayload): Promise<unknown> {
         const response = await ApiServices.post(
-            ApiEndpoints.registerDeveloper,
+            ApiEndpoints.registerCreator,
             { name, email, password },
         );
         return readSuccessResponse(response);
@@ -34,7 +34,13 @@ class ApiAuth {
     }
 
     async getCurrentUser(): Promise<unknown> {
-        const response = await ApiServices.get(ApiEndpoints.currentUser);
+        const response = await ApiServices.get(ApiEndpoints.currentUser, {
+            params: { _: Date.now() },
+            headers: {
+                "Cache-Control": "no-cache, no-store",
+                Pragma: "no-cache",
+            },
+        });
         return readSuccessResponse(response);
     }
 }

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/core/auth/authStores'
 
 
 const routes = [
@@ -56,6 +57,58 @@ const routes = [
     meta: { title: 'Masuk Akun' }
   },
   {
+    path: '/register/creator',
+    alias: '/register/designer',
+    name: 'register-creator',
+    component: () => import('@/views/auth/RegisterCreatorView.vue'),
+    meta: { title: 'Daftar sebagai Creator' }
+  },
+  {
+    path: '/admin',
+    component: () => import('@/components/layout/AdminLayout.vue'),
+    redirect: { name: 'admin-users' },
+    meta: { requiresAdmin: true },
+    children: [
+      {
+        path: 'users',
+        name: 'admin-users',
+        component: () => import('@/views/admin/AdminUsersView.vue'),
+        meta: {
+          title: 'Manajemen Pengguna',
+          description: 'Kelola akun pengguna dan status akses.',
+        },
+      },
+      {
+        path: 'creator-requests',
+        alias: 'designer-requests',
+        name: 'admin-creator-requests',
+        component: () => import('@/views/admin/AdminCreatorRequestsView.vue'),
+        meta: {
+          title: 'Request Creator',
+          description: 'Tinjau permintaan pembuatan akun creator.',
+        },
+      },
+      {
+        path: 'fonts',
+        name: 'admin-fonts',
+        component: () => import('@/views/admin/AdminSectionPlaceholder.vue'),
+        meta: {
+          title: 'Manajemen Font',
+          description: 'Kelola font yang diajukan oleh creator.',
+        },
+      },
+      {
+        path: 'payments',
+        name: 'admin-payments',
+        component: () => import('@/views/admin/AdminPaymentsView.vue'),
+        meta: {
+          title: 'Manajemen Payment',
+          description: 'Area pengujian verifikasi payment.',
+        },
+      },
+    ],
+  },
+  {
     // :id adalah parameter dinamis -> /font/sinerva, /font/swaraga, dst.
     path: '/collections',
     name: 'collections',
@@ -98,10 +151,41 @@ const router = createRouter({
   }
 })
 
-// Navigation Guard: Mengubah Judul Tab Browser Secara Otomatis
-router.beforeEach((to, from, next) => {
+function getErrorStatus(error: unknown): number | undefined {
+  if (typeof error !== 'object' || error === null || !('response' in error)) {
+    return undefined
+  }
+  const response = error.response
+  if (typeof response !== 'object' || response === null || !('status' in response)) {
+    return undefined
+  }
+  return typeof response.status === 'number' ? response.status : undefined
+}
+
+router.beforeEach(async (to) => {
   document.title = to.meta.title ? `${to.meta.title} | FontStore` : 'FontStore'
-  next()
+
+  if (!to.matched.some((record) => record.meta.requiresAdmin)) {
+    return true
+  }
+
+  const authStore = useAuthStore()
+  if (!authStore.token) {
+    return { name: 'login', query: { redirect: to.fullPath } }
+  }
+
+  if (!authStore.user) {
+    try {
+      await authStore.loadCurrentUser()
+    } catch (error) {
+      if (getErrorStatus(error) === 401) {
+        return { name: 'login', query: { redirect: to.fullPath } }
+      }
+      throw error
+    }
+  }
+
+  return authStore.isAdmin ? true : { name: 'home' }
 })
 
 export default router

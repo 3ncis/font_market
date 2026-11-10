@@ -374,13 +374,145 @@
                 </div>
             </aside>
         </section>
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="translate-y-3 opacity-0"
+                enter-to-class="translate-y-0 opacity-100"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="translate-y-0 opacity-100"
+                leave-to-class="translate-y-3 opacity-0"
+            >
+                <div
+                    v-if="showAuthModal"
+                    class="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-[#121214]/60 p-4 backdrop-blur-sm sm:p-6"
+                    @click.self="closeAuthModal"
+                >
+                    <section
+                        class="relative w-full max-w-[480px] overflow-hidden rounded-2xl border border-white/60 bg-white shadow-2xl"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="cart-auth-title"
+                    >
+                        <div class="h-1.5 bg-gradient-to-r from-[#B8955A] via-[#121214] to-[#B8955A]"></div>
+                        <button
+                            type="button"
+                            class="absolute right-5 top-6 rounded-full p-2 text-[#68686C] transition hover:bg-[#F6F6F5] hover:text-[#121214]"
+                            aria-label="Tutup dialog autentikasi"
+                            @click="closeAuthModal"
+                        >
+                            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor"
+                                stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+                                <path d="m6 6 12 12M18 6 6 18" />
+                            </svg>
+                        </button>
+
+                        <div class="p-6 sm:p-8">
+                            <div class="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#F6F1E8] text-[#8A6A36]">
+                                <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor"
+                                    stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-hidden="true">
+                                    <path d="M12 3 5 6v5c0 4.5 2.9 8.3 7 10 4.1-1.7 7-5.5 7-10V6l-7-3Z" />
+                                    <path d="m9 12 2 2 4-4" />
+                                </svg>
+                            </div>
+
+                            <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#8A6A36]">
+                                Autentikasi diperlukan
+                            </p>
+                            <h2 id="cart-auth-title" class="mt-2 pr-8 font-serif text-3xl font-semibold text-[#121214]">
+                                {{ authMode === 'login' ? 'Masuk untuk checkout' : 'Buat akun baru' }}
+                            </h2>
+                            <p class="mt-2 text-sm leading-6 text-[#68686C]">
+                                Masuk atau daftar untuk melanjutkan ke checkout.
+                            </p>
+
+                            <div class="mt-6 grid grid-cols-2 rounded-lg bg-[#F6F6F5] p-1">
+                                <button
+                                    type="button"
+                                    class="rounded-md px-3 py-2.5 text-sm font-semibold transition"
+                                    :class="authMode === 'login' ? 'bg-white text-[#121214] shadow-sm' : 'text-[#68686C] hover:text-[#121214]'"
+                                    @click="setAuthMode('login')"
+                                >
+                                    Masuk
+                                </button>
+                                <button
+                                    type="button"
+                                    class="rounded-md px-3 py-2.5 text-sm font-semibold transition"
+                                    :class="authMode === 'register' ? 'bg-white text-[#121214] shadow-sm' : 'text-[#68686C] hover:text-[#121214]'"
+                                    @click="setAuthMode('register')"
+                                >
+                                    Daftar
+                                </button>
+                            </div>
+
+                            <form class="mt-5 flex flex-col gap-4" @submit.prevent="submitAuth">
+                                <label v-if="authMode === 'register'" class="flex flex-col gap-2 text-sm font-medium text-[#121214]">
+                                    Nama
+                                    <input
+                                        v-model="authName"
+                                        type="text"
+                                        autocomplete="name"
+                                        required
+                                        :disabled="authSubmitting"
+                                        class="h-11 rounded-lg border border-[#E2E2E4] px-3 outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
+                                        placeholder="Nama lengkap"
+                                    />
+                                </label>
+                                <label class="flex flex-col gap-2 text-sm font-medium text-[#121214]">
+                                    Email
+                                    <input
+                                        v-model="authEmail"
+                                        type="email"
+                                        autocomplete="email"
+                                        required
+                                        :disabled="authSubmitting"
+                                        class="h-11 rounded-lg border border-[#E2E2E4] px-3 outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
+                                        placeholder="nama@email.com"
+                                    />
+                                </label>
+                                <label class="flex flex-col gap-2 text-sm font-medium text-[#121214]">
+                                    Password
+                                    <input
+                                        v-model="authPassword"
+                                        type="password"
+                                        :autocomplete="authMode === 'login' ? 'current-password' : 'new-password'"
+                                        required
+                                        :disabled="authSubmitting"
+                                        class="h-11 rounded-lg border border-[#E2E2E4] px-3 outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
+                                        placeholder="Masukkan password"
+                                    />
+                                </label>
+
+                                <p v-if="authError" role="alert"
+                                    class="rounded-lg border border-[#D9A49D] bg-[#FFF8F6] px-3 py-2 text-sm text-[#9A3D32]">
+                                    {{ authError }}
+                                </p>
+
+                                <button
+                                    type="submit"
+                                    :disabled="authSubmitting"
+                                    class="mt-1 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#121214] px-5 text-sm font-semibold text-white transition hover:bg-[#343438] disabled:cursor-wait disabled:opacity-60"
+                                >
+                                    {{ authSubmitting ? 'Memproses...' : authMode === 'login' ? 'Masuk ke akun' : 'Buat akun' }}
+                                    <span v-if="!authSubmitting" aria-hidden="true">→</span>
+                                </button>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </Transition>
+        </Teleport>
     </AppLayout>
 </template>
 <script>
 import { defineComponent } from 'vue';
 import { RouterLink } from 'vue-router';
 import AppLayout from '@/components/layout/applayout.vue';
+import { useAuthStore } from '@/core/auth/authStores';
 import { cartLicenseOptions, useCartStore } from '@/core/cart/cartStore';
+import JwtService from '@/core/services/jwtService';
+import { readErrorResponse } from '@/core/utils/apiResponse';
 
 export default defineComponent({
   name: 'Cart',
@@ -393,10 +525,18 @@ export default defineComponent({
   data() {
     return {
       cartStore: useCartStore(),
+      authStore: useAuthStore(),
       licenseOptions: cartLicenseOptions,
       downloadMessage: '',
       cartLoadError: '',
       serviceFee: 0,
+      showAuthModal: false,
+      authMode: 'login',
+      authName: '',
+      authEmail: '',
+      authPassword: '',
+      authError: '',
+      authSubmitting: false,
     };
   },
 
@@ -474,7 +614,60 @@ export default defineComponent({
         return;
       }
 
+      if (!JwtService.getToken()) {
+        this.authStore.clearAuth();
+        this.authMode = 'login';
+        this.authError = '';
+        this.showAuthModal = true;
+        return;
+      }
+
       this.$router.push({ name: 'checkout' });
+    },
+
+    setAuthMode(mode) {
+      this.authMode = mode;
+      this.authError = '';
+    },
+
+    closeAuthModal() {
+      if (this.authSubmitting) return;
+      this.showAuthModal = false;
+      this.authPassword = '';
+      this.authError = '';
+    },
+
+    async submitAuth() {
+      if (this.authSubmitting) return;
+
+      this.authError = '';
+      this.authSubmitting = true;
+      try {
+        if (this.authMode === 'register') {
+          await this.authStore.register(
+            this.authName.trim(),
+            this.authEmail.trim(),
+            this.authPassword,
+          );
+        } else {
+          await this.authStore.login(
+            this.authEmail.trim(),
+            this.authPassword,
+          );
+        }
+
+        this.showAuthModal = false;
+        this.authPassword = '';
+      } catch (error) {
+        this.authError = readErrorResponse(
+          error,
+          this.authMode === 'login'
+            ? 'Login gagal. Periksa kembali email dan password Anda.'
+            : 'Pendaftaran gagal. Silakan periksa data Anda dan coba lagi.',
+        );
+      } finally {
+        this.authSubmitting = false;
+      }
     },
   },
 });

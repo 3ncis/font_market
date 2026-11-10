@@ -9,10 +9,50 @@ export const cartLicenseOptions = [
 ];
 
 const defaultLicense = cartLicenseOptions[0];
+const CATALOG_STORAGE_KEY = 'fontstore.catalog';
+
+function isRecord(value) {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function readCatalog() {
+    if (typeof window === 'undefined') return [];
+
+    try {
+        const rawCatalog = window.localStorage.getItem(CATALOG_STORAGE_KEY);
+        if (rawCatalog === null) return [];
+
+        const catalog = JSON.parse(rawCatalog);
+        if (
+            !Array.isArray(catalog) ||
+            catalog.some((item) =>
+                !isRecord(item) ||
+                typeof item.id !== 'string' ||
+                !item.id.trim() ||
+                !cartLicenseOptions.includes(item.license)
+            )
+        ) {
+            console.error('Data catalog lokal memiliki struktur yang tidak valid.');
+            return [];
+        }
+
+        return [
+            ...new Map(catalog.map((item) => [item.id, item])).values(),
+        ];
+    } catch (error) {
+        console.error('Data catalog lokal tidak dapat dibaca:', error);
+        return [];
+    }
+}
+
+function persistCatalog(items) {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(items));
+}
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
-        items: [],
+        items: readCatalog(),
         fonts: [],
         fontsLoaded: false,
     }),
@@ -69,19 +109,40 @@ export const useCartStore = defineStore('cart', {
                 return { added: false, reason: 'duplicate' };
             }
 
-            this.items.push({ id, license: defaultLicense });
+            const items = [...this.items, { id, license: defaultLicense }];
+            persistCatalog(items);
+            this.items = items;
             return { added: true, reason: null };
         },
 
         removeFont(id) {
-            this.items = this.items.filter((item) => item.id !== id);
+            const items = this.items.filter((item) => item.id !== id);
+            persistCatalog(items);
+            this.items = items;
         },
 
         updateLicense(id, license) {
             if (!cartLicenseOptions.includes(license)) return;
 
-            const item = this.items.find((entry) => entry.id === id);
-            if (item) item.license = license;
+            const items = this.items.map((item) =>
+                item.id === id ? { ...item, license } : item,
+            );
+            if (items.some((item, index) => item !== this.items[index])) {
+                persistCatalog(items);
+                this.items = items;
+            }
+        },
+
+        clearCatalogAfterPayment() {
+            this.items = [];
+            if (typeof window === 'undefined') return;
+
+            try {
+                window.localStorage.removeItem(CATALOG_STORAGE_KEY);
+            } catch (error) {
+                console.error('Catalog lokal tidak dapat dihapus:', error);
+                throw error;
+            }
         },
     },
 });

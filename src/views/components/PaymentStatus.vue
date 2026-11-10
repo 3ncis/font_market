@@ -8,6 +8,30 @@ export default {
             default: 'pending',
             validator: (value) => ['pending', 'success'].includes(value),
         },
+        order: {
+            type: Object,
+            default: null,
+        },
+    },
+
+    methods: {
+        formatPrice(price) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                maximumFractionDigits: 0,
+            }).format(Number(price) || 0);
+        },
+
+        formatDate(value) {
+            const timestamp = Date.parse(value);
+            return Number.isFinite(timestamp)
+                ? new Intl.DateTimeFormat('id-ID', {
+                    dateStyle: 'long',
+                    timeStyle: 'short',
+                }).format(timestamp)
+                : 'Tidak tersedia';
+        },
     },
 
     computed: {
@@ -50,15 +74,53 @@ export default {
 
             <div class="h-px w-full bg-[#E2E2E4]"></div>
 
-            <div class="flex flex-col gap-2.5">
+            <div v-if="order" class="flex flex-col gap-4">
+                <h3 class="font-['Geist'] text-sm font-semibold text-[#121214]">
+                    Detail transaksi
+                </h3>
+                <dl class="grid grid-cols-1 gap-3 rounded border border-[#E2E2E4] p-4 text-sm sm:grid-cols-2">
+                    <div>
+                        <dt class="font-['Geist'] text-xs text-[#8F897F]">ID transaksi</dt>
+                        <dd class="mt-1 break-all font-mono text-xs text-[#121214]">{{ order.id }}</dd>
+                    </div>
+                    <div>
+                        <dt class="font-['Geist'] text-xs text-[#8F897F]">Tanggal transaksi</dt>
+                        <dd class="mt-1 font-['Geist'] text-[#121214]">{{ formatDate(order.createdAt) }}</dd>
+                    </div>
+                </dl>
+
+                <div v-if="order.items.length" class="divide-y divide-[#E2E2E4] border-y border-[#E2E2E4]">
+                    <div v-for="item in order.items" :key="item.id"
+                        class="flex items-start justify-between gap-4 py-3">
+                        <div class="min-w-0">
+                            <p class="break-words font-['Geist'] text-sm font-medium text-[#121214]">
+                                {{ item.name }}
+                            </p>
+                            <p v-if="item.license" class="mt-1 font-['Geist'] text-xs text-[#68686C]">
+                                {{ item.license }}
+                            </p>
+                        </div>
+                        <span class="shrink-0 font-['Geist'] text-sm text-[#121214]">
+                            {{ formatPrice(item.price) }}
+                        </span>
+                    </div>
+                </div>
+                <p v-else class="font-['Geist'] text-sm leading-[21.7px] text-[#68686C]">
+                    Rincian font tidak tersedia pada data order.
+                </p>
+
+                <div class="flex justify-between gap-4 font-['Geist'] text-base font-semibold text-[#121214]">
+                    <span>Total transaksi</span>
+                    <span>{{ formatPrice(order.total) }}</span>
+                </div>
+            </div>
+
+            <div v-else class="flex flex-col gap-2.5">
                 <h3 class="font-['Geist'] text-sm font-semibold text-[#121214]">
                     Detail transaksi belum tersedia
                 </h3>
                 <p class="font-['Geist'] text-sm leading-[21.7px] text-[#68686C]">
-                    ID dan tanggal transaksi hanya akan ditampilkan jika datanya tersedia.
-                    <template v-if="!isSuccess">
-                        Ringkasan pesanan di halaman ini bukan bukti pembayaran.
-                    </template>
+                    Detail transaksi akan ditampilkan setelah data order berhasil dimuat.
                 </p>
             </div>
 

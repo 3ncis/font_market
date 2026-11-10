@@ -32,9 +32,22 @@ export const ApiBaseUrl = configuredApiBaseUrl.replace(/\/+$/, "");
 
 export const ApiEndpoints = {
     register: "/auth/register",
-    registerDeveloper: "/auth/register-developer",
+    registerCreator: "/auth/register-developer",
     login: "/auth/login",
     currentUser: "/auth/me",
+    adminUsers: "/admin/users",
+    adminUserStatus: (userId: string) =>
+        `/admin/users/${encodeURIComponent(userId)}/status`,
+    adminCreatorRequests: "/admin/designer-requests",
+    approveCreatorRequest: (requestId: string) =>
+        `/admin/designer-requests/${encodeURIComponent(requestId)}/approve`,
+    rejectCreatorRequest: (requestId: string) =>
+        `/admin/designer-requests/${encodeURIComponent(requestId)}/reject`,
+    validateCreatorRegistrationToken: "/auth/register-designer/validate",
+    registerCreatorWithToken: "/auth/register-designer",
+    adminPayments: "/admin/payments",
+    approvePaymentForTesting: (paymentId: string) =>
+        `/admin/payments/${encodeURIComponent(paymentId)}/approve-testing`,
     fonts: "/fonts",
     fontBySlug: (slug: string) => `/fonts/${encodeURIComponent(slug)}`,
     orders: "/orders",
