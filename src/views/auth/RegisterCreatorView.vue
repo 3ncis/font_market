@@ -9,17 +9,19 @@ const route = useRoute();
 const router = useRouter();
 
 const token = computed(() =>
-    typeof route.query.token === "string" ? route.query.token.trim() : "",
+    typeof route.query.token === "string"
+        ? route.query.token.trim()
+        : new URLSearchParams(window.location.hash.slice(1)).get("token")?.trim() ?? "",
 );
 const isValidating = ref(true);
 const isTokenValid = ref(false);
 const hasValidationError = ref(false);
 const invalidMessage = ref("");
 const validationError = ref("");
-const name = ref("");
-const email = ref("");
-const password = ref("");
-const showPassword = ref(false);
+const storeName = ref("");
+const website = ref("");
+const instagram = ref("");
+const bio = ref("");
 const validationMessage = ref("");
 const isSubmitting = ref(false);
 const isRegistered = ref(false);
@@ -53,7 +55,7 @@ async function validateToken() {
     } catch (error) {
         if (sequence !== validationSequence) return;
         const status = getApiErrorStatus(error);
-        if (status === 401 || status === 403 || status === 404 || status === 409) {
+        if (status === 401 || status === 403 || status === 404 || status === 409 || status === 410) {
             invalidMessage.value =
                 "Token tidak valid, sudah digunakan, atau sudah kedaluwarsa. Minta link undangan baru kepada administrator.";
         } else {
@@ -69,30 +71,20 @@ async function validateToken() {
 }
 
 function validateForm() {
-    const normalizedEmail = email.value.trim();
-    const passwordIsValid =
-        password.value.length >= 8 &&
-        password.value.length <= 72 &&
-        /[a-z]/.test(password.value) &&
-        /[A-Z]/.test(password.value) &&
-        /\d/.test(password.value);
-
-    if (name.value.trim().length < 2 || name.value.trim().length > 100) {
-        validationMessage.value = "Nama harus berisi 2 sampai 100 karakter.";
+    const normalizedName = storeName.value.trim();
+    const normalizedWebsite = website.value.trim();
+    if (normalizedName.length < 2 || normalizedName.length > 150) {
+        validationMessage.value = "Nama toko harus berisi 2 sampai 150 karakter.";
         return false;
     }
 
-    if (
-        normalizedEmail.length > 254 ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)
-    ) {
-        validationMessage.value = "Masukkan alamat email yang valid.";
+    if (normalizedWebsite && !/^https?:\/\/\S+$/i.test(normalizedWebsite)) {
+        validationMessage.value = "Website harus menggunakan URL HTTP atau HTTPS yang valid.";
         return false;
     }
 
-    if (!passwordIsValid) {
-        validationMessage.value =
-            "Password harus berisi 8–72 karakter, huruf besar, huruf kecil, dan angka.";
+    if (normalizedWebsite.length > 2048 || instagram.value.trim().length > 100 || bio.value.trim().length > 2000) {
+        validationMessage.value = "Panjang salah satu isian melebihi batas.";
         return false;
     }
 
@@ -107,9 +99,10 @@ async function submitRegistration() {
     try {
         await CreatorRegistrationApi.register({
             token: token.value,
-            name: name.value.trim(),
-            email: email.value.trim().toLowerCase(),
-            password: password.value,
+            store_name: storeName.value.trim(),
+            website: website.value.trim(),
+            instagram: instagram.value.trim(),
+            bio: bio.value.trim(),
         });
         isRegistered.value = true;
         redirectTimer = setTimeout(
@@ -118,11 +111,11 @@ async function submitRegistration() {
         );
     } catch (error) {
         const status = getApiErrorStatus(error);
-        if (status === 401 || status === 403 || status === 404 || status === 409) {
+        if (status === 401 || status === 403 || status === 404 || status === 409 || status === 410) {
             isTokenValid.value = false;
             invalidMessage.value =
                 status === 409
-                    ? "Email sudah terdaftar atau token sudah digunakan. Periksa kembali atau minta link undangan baru."
+                    ? "Profil toko sudah terdaftar menggunakan undangan ini."
                     : "Token tidak valid, sudah digunakan, atau sudah kedaluwarsa. Minta link undangan baru kepada administrator.";
         } else {
             validationMessage.value = getUserFacingApiError(
@@ -155,13 +148,14 @@ onBeforeUnmount(() => {
 
             <div class="mt-8">
                 <p class="font-mono text-xs tracking-[0.16em] text-[#68686C]">
-                    AKUN CREATOR
+                    PENDAFTARAN TOKO DESIGNER
                 </p>
                 <h1 class="mt-2 font-['Crimson_Pro'] text-3xl font-semibold text-[#121214]">
-                    Daftar sebagai creator
+                    Lengkapi profil toko Anda
                 </h1>
                 <p class="mt-2 text-sm leading-6 text-[#68686C]">
-                    Lengkapi data di bawah untuk membuat akun creator Anda.
+                    Undangan ini hanya dapat digunakan satu kali. Akun Anda sudah
+                    terdaftar; lengkapi informasi toko untuk mengaktifkan profil designer.
                 </p>
             </div>
 
@@ -212,7 +206,7 @@ onBeforeUnmount(() => {
                 aria-live="polite"
             >
                 <p class="text-sm leading-6 text-[#28633B]">
-                    Pendaftaran berhasil. Anda akan diarahkan ke halaman login.
+                    Profil toko berhasil dibuat. Anda akan diarahkan ke halaman login.
                 </p>
             </div>
 
@@ -223,63 +217,58 @@ onBeforeUnmount(() => {
                 @submit.prevent="submitRegistration"
             >
                 <label class="flex flex-col gap-2 text-sm font-medium text-[#121214]">
-                    Nama
+                    Nama toko
                     <input
-                        v-model="name"
+                        v-model="storeName"
                         type="text"
-                        name="name"
-                        autocomplete="name"
+                        name="store_name"
+                        autocomplete="organization"
                         required
                         minlength="2"
+                        maxlength="150"
+                        :disabled="isSubmitting"
+                        class="h-11 rounded border border-[#D1C9B8] px-3 text-sm outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
+                        placeholder="Nama toko atau studio"
+                    />
+                </label>
+
+                <label class="flex flex-col gap-2 text-sm font-medium text-[#121214]">
+                    Website (opsional)
+                    <input
+                        v-model="website"
+                        type="url"
+                        name="website"
+                        maxlength="2048"
+                        :disabled="isSubmitting"
+                        class="h-11 rounded border border-[#D1C9B8] px-3 text-sm outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
+                        placeholder="https://contoh.com"
+                    />
+                </label>
+
+                <label class="flex flex-col gap-2 text-sm font-medium text-[#121214]">
+                    Instagram (opsional)
+                    <input
+                        v-model="instagram"
+                        type="text"
+                        name="instagram"
                         maxlength="100"
                         :disabled="isSubmitting"
                         class="h-11 rounded border border-[#D1C9B8] px-3 text-sm outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
-                        placeholder="Nama lengkap"
+                        placeholder="@namatoko atau tautan profil"
                     />
                 </label>
 
                 <label class="flex flex-col gap-2 text-sm font-medium text-[#121214]">
-                    Email
-                    <input
-                        v-model="email"
-                        type="email"
-                        name="email"
-                        autocomplete="email"
-                        required
-                        maxlength="254"
+                    Deskripsi toko (opsional)
+                    <textarea
+                        v-model="bio"
+                        name="bio"
+                        rows="4"
+                        maxlength="2000"
                         :disabled="isSubmitting"
-                        class="h-11 rounded border border-[#D1C9B8] px-3 text-sm outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
-                        placeholder="nama@email.com"
+                        class="resize-y rounded border border-[#D1C9B8] px-3 py-2 text-sm outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
+                        placeholder="Ceritakan singkat tentang studio atau karya Anda"
                     />
-                </label>
-
-                <label class="flex flex-col gap-2 text-sm font-medium text-[#121214]">
-                    Password
-                    <span class="relative">
-                        <input
-                            v-model="password"
-                            :type="showPassword ? 'text' : 'password'"
-                            name="password"
-                            autocomplete="new-password"
-                            required
-                            minlength="8"
-                            maxlength="72"
-                            :disabled="isSubmitting"
-                            class="h-11 w-full rounded border border-[#D1C9B8] px-3 pr-20 text-sm outline-none transition focus:border-[#121214] disabled:bg-[#F6F6F5]"
-                            placeholder="Buat password"
-                        />
-                        <button
-                            type="button"
-                            :disabled="isSubmitting"
-                            class="absolute inset-y-0 right-3 text-xs font-semibold text-[#68686C] hover:text-[#121214] disabled:opacity-50"
-                            @click="showPassword = !showPassword"
-                        >
-                            {{ showPassword ? "Sembunyikan" : "Tampilkan" }}
-                        </button>
-                    </span>
-                    <span class="text-xs font-normal text-[#68686C]">
-                        Minimal 8 karakter, huruf besar, huruf kecil, dan angka.
-                    </span>
                 </label>
 
                 <p
@@ -300,7 +289,7 @@ onBeforeUnmount(() => {
                         class="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
                         aria-hidden="true"
                     />
-                    {{ isSubmitting ? "Memproses..." : "Daftar" }}
+                    {{ isSubmitting ? "Memproses..." : "Simpan profil toko" }}
                 </button>
             </form>
 

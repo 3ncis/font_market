@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { getFontStyleCount } from '@/core/designers/designerData';
+import { getFontStyleCount } from '@/core/api/designer.api';
 
 export default {
     name: 'DesignerPublishedFontCard',

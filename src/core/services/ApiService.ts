@@ -21,6 +21,16 @@ ApiService.interceptors.request.use((config) => {
     const requestPath = config.url?.split("?")[0];
     const requiresAuthentication =
         requestPath === ApiEndpoints.currentUser ||
+        requestPath === ApiEndpoints.designerRequests ||
+        requestPath === ApiEndpoints.myDesignerRequest ||
+        requestPath === ApiEndpoints.fonts && config.method?.toLowerCase() === "post" ||
+        requestPath?.startsWith(`${ApiEndpoints.fonts}/mine`) ||
+        requestPath?.startsWith(`${ApiEndpoints.fontReviewQueue}`) ||
+        requestPath?.startsWith("/fonts/") &&
+            (config.method?.toLowerCase() === "patch" ||
+                requestPath.endsWith("/submit") ||
+                requestPath.endsWith("/review") ||
+                requestPath.endsWith("/file")) ||
         requestPath === ApiEndpoints.orders ||
         requestPath?.startsWith(`${ApiEndpoints.orders}/`) ||
         requestPath === ApiEndpoints.collection ||

@@ -4,9 +4,10 @@ import { readSuccessResponse } from "@/core/utils/apiResponse";
 
 interface RegistrationPayload {
     token: string;
-    name: string;
-    email: string;
-    password: string;
+    store_name: string;
+    website: string;
+    instagram: string;
+    bio: string;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -15,10 +16,9 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 class CreatorRegistrationApi {
     async validateToken(token: string): Promise<boolean> {
-        // TODO: sambungkan ke endpoint backend
-        const response = await ApiServices.get(
+        const response = await ApiServices.post(
             ApiEndpoints.validateCreatorRegistrationToken,
-            { params: { token } },
+            { token },
         );
         const result = readSuccessResponse(response);
 
@@ -30,7 +30,6 @@ class CreatorRegistrationApi {
     }
 
     async register(payload: RegistrationPayload): Promise<void> {
-        // TODO: sambungkan ke endpoint backend
         const response = await ApiServices.post(
             ApiEndpoints.registerCreatorWithToken,
             payload,

@@ -64,6 +64,18 @@ const routes = [
     meta: { title: 'Daftar sebagai Creator' }
   },
   {
+    path: '/request-designer',
+    name: 'request-designer',
+    component: () => import('@/views/RequestDesignerView.vue'),
+    meta: { title: 'Request Designer', requiresAuth: true },
+  },
+  {
+    path: '/creator/fonts',
+    name: 'creator-fonts',
+    component: () => import('@/views/CreatorFontsView.vue'),
+    meta: { title: 'Karya Font Saya', requiresAuth: true, requiresCreator: true },
+  },
+  {
     path: '/admin',
     component: () => import('@/components/layout/AdminLayout.vue'),
     redirect: { name: 'admin-users' },
@@ -91,7 +103,7 @@ const routes = [
       {
         path: 'fonts',
         name: 'admin-fonts',
-        component: () => import('@/views/admin/AdminSectionPlaceholder.vue'),
+        component: () => import('@/views/admin/AdminFontsView.vue'),
         meta: {
           title: 'Manajemen Font',
           description: 'Kelola font yang diajukan oleh creator.',
@@ -165,7 +177,10 @@ function getErrorStatus(error: unknown): number | undefined {
 router.beforeEach(async (to) => {
   document.title = to.meta.title ? `${to.meta.title} | FontStore` : 'FontStore'
 
-  if (!to.matched.some((record) => record.meta.requiresAdmin)) {
+  const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin)
+  const requiresAuth = requiresAdmin || to.matched.some((record) => record.meta.requiresAuth)
+  const requiresCreator = to.matched.some((record) => record.meta.requiresCreator)
+  if (!requiresAuth) {
     return true
   }
 
@@ -185,7 +200,12 @@ router.beforeEach(async (to) => {
     }
   }
 
-  return authStore.isAdmin ? true : { name: 'home' }
+  if (requiresAdmin && !authStore.isAdmin) return { name: 'home' }
+  if (requiresCreator && !authStore.isCreator) return { name: 'request-designer' }
+  if (to.name === 'request-designer' && authStore.isCreator) {
+    return { name: 'creator-fonts' }
+  }
+  return true
 })
 
 export default router

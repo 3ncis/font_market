@@ -126,12 +126,16 @@ import AppLayout from '@/components/layout/applayout.vue';
 import ApiDesigner from '@/core/api/designer.api';
 import { readErrorResponse } from '@/core/utils/apiResponse';
 import DesignerFontCard from './components/DesignerFontCard.vue';
+import DesignerProfileBanner from './components/DesignerProfileBanner.vue'
+import DesignerProfileCard from './components/DesignerProfileCard.vue';
+import DesignerPublishedFonts from './components/DesignerPublishedFonts.vue';
 
 export default {
     name: 'DesignerProfileView',
 
     components: {
         AppLayout,
+        DesignerFontCard,
         DesignerProfileBanner,
         DesignerProfileCard,
         DesignerPublishedFonts,

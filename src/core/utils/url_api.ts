@@ -32,7 +32,6 @@ export const ApiBaseUrl = configuredApiBaseUrl.replace(/\/+$/, "");
 
 export const ApiEndpoints = {
     register: "/auth/register",
-    registerCreator: "/auth/register-developer",
     login: "/auth/login",
     currentUser: "/auth/me",
     adminUsers: "/admin/users",
@@ -52,6 +51,17 @@ export const ApiEndpoints = {
     fontBySlug: (slug: string) => `/fonts/${encodeURIComponent(slug)}`,
     orders: "/orders",
     designers: "/designer",
+    designerRequests: "/designer/requests",
+    myDesignerRequest: "/designer/requests/mine",
+    fontCategories: "/fonts/categories",
+    myFonts: "/fonts/mine",
+    fontReviewQueue: "/fonts/review-queue",
+    fontReviewDetail: (id: string) =>
+        `/fonts/review-queue/${encodeURIComponent(id)}`,
+    submitFont: (id: string) => `/fonts/${encodeURIComponent(id)}/submit`,
+    reviewFont: (id: string) => `/fonts/${encodeURIComponent(id)}/review`,
+    fontFamilyFile: (id: string, index: number) =>
+        `/fonts/${encodeURIComponent(id)}/families/${index}/file`,
     collection: "/collections",
     collectionFontById: (fontId: string) =>
         `/collections/${encodeURIComponent(fontId)}`,

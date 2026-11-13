@@ -245,11 +245,13 @@ onBeforeUnmount(() => {
             </div>
             <template v-else>
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[760px] text-left text-sm">
+                    <table class="w-full min-w-[980px] text-left text-sm">
                         <thead class="bg-[#FAF8F5] text-xs font-semibold uppercase tracking-wide text-[#68686C]">
                             <tr>
                                 <th class="px-5 py-4">Nama</th>
                                 <th class="px-5 py-4">Email</th>
+                                <th class="px-5 py-4">No. telepon</th>
+                                <th class="px-5 py-4">User ID</th>
                                 <th class="px-5 py-4">Tanggal request</th>
                                 <th class="px-5 py-4">Status</th>
                                 <th class="px-5 py-4">Aksi</th>
@@ -265,6 +267,12 @@ onBeforeUnmount(() => {
                                 </td>
                                 <td class="px-5 py-4 text-[#68686C]">
                                     {{ request.email }}
+                                </td>
+                                <td class="whitespace-nowrap px-5 py-4 text-[#68686C]">
+                                    {{ request.phone }}
+                                </td>
+                                <td class="max-w-40 truncate px-5 py-4 font-mono text-xs text-[#68686C]" :title="request.user_id">
+                                    {{ request.user_id }}
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-4 text-[#68686C]">
                                     {{ formatDate(request.created_at) }}

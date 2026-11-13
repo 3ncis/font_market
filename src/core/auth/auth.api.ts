@@ -17,14 +17,6 @@ class ApiAuth {
         return readSuccessResponse(response);
     }
 
-    async registerCreator({ name, email, password }: RegisterPayload): Promise<unknown> {
-        const response = await ApiServices.post(
-            ApiEndpoints.registerCreator,
-            { name, email, password },
-        );
-        return readSuccessResponse(response);
-    }
-
     async login(email: string, password: string): Promise<unknown> {
         const response = await ApiServices.post(
             ApiEndpoints.login,

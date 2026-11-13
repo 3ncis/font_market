@@ -2,6 +2,7 @@
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useCartStore } from '@/core/cart/cartStore';
+import { useAuthStore } from '@/core/auth/authStores';
 
 export default defineComponent({
   name: 'AppHeader',
@@ -9,6 +10,7 @@ export default defineComponent({
   setup() {
     const isVisible = ref(true);
     const cartStore = useCartStore();
+    const authStore = useAuthStore();
     let lastScrollY = 0;
     let ticking = false;
 
@@ -54,6 +56,7 @@ export default defineComponent({
     return {
       isVisible,
       cartStore,
+      authStore,
     };
   },
 
@@ -100,7 +103,7 @@ export default defineComponent({
         </RouterLink>
 
         <RouterLink
-          :to="{ name: 'home' }"
+          :to="{ name: authStore.isCreator ? 'creator-fonts' : 'request-designer' }"
           class="text-sm font-normal text-[#68686C] transition-colors hover:text-[#121214]"
         >
           Hasil Pencarian
@@ -162,7 +165,7 @@ export default defineComponent({
           :to="{ name: 'home' }"
           class="inline-flex items-center justify-center gap-2 rounded bg-[#121214] px-3 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#343438] sm:px-4 sm:text-[13px]"
         >
-          <span class="whitespace-nowrap">Submit Karya</span>
+          <span class="whitespace-nowrap">{{ authStore.isCreator ? 'Submit Karya' : 'Jadi Designer' }}</span>
 
           <svg
             xmlns="http://www.w3.org/2000/svg"

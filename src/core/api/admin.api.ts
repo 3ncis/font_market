@@ -18,8 +18,11 @@ export interface AdminUser {
 
 export interface CreatorRequest {
     request_id: string;
+    user_id: string;
     name: string;
     email: string;
+    phone: string;
+    review_note: string | null;
     created_at: string;
     status: CreatorRequestStatus;
 }
@@ -133,20 +136,28 @@ function parseCreatorRequest(value: unknown): CreatorRequest {
         ? value.request_id ?? value.id
         : undefined;
     const user = isRecord(value) ? value.user : undefined;
-    const storeProfile = isRecord(value) ? value.store_profile : undefined;
-    const createdAt = isRecord(storeProfile)
-        ? storeProfile.created_at
-        : isRecord(value)
-          ? value.created_at
-          : undefined;
+    const userId =
+        isRecord(value) && typeof value.user_id === "string"
+            ? value.user_id
+            : isRecord(user) && typeof user.id === "string"
+              ? user.id
+              : undefined;
+    const name = isRecord(value) && typeof value.name === "string"
+        ? value.name
+        : isRecord(user) ? user.name : undefined;
+    const email = isRecord(value) && typeof value.email === "string"
+        ? value.email
+        : isRecord(user) ? user.email : undefined;
 
     if (
         !isRecord(value) ||
         typeof requestId !== "string" ||
-        !isRecord(user) ||
-        typeof user.name !== "string" ||
-        typeof user.email !== "string" ||
-        typeof createdAt !== "string" ||
+        typeof userId !== "string" ||
+        typeof name !== "string" ||
+        typeof email !== "string" ||
+        typeof value.phone !== "string" ||
+        typeof value.created_at !== "string" ||
+        (value.review_note !== null && typeof value.review_note !== "string") ||
         (value.status !== "pending" &&
             value.status !== "approved" &&
             value.status !== "rejected")
@@ -156,9 +167,12 @@ function parseCreatorRequest(value: unknown): CreatorRequest {
 
     return {
         request_id: requestId,
-        name: user.name,
-        email: user.email,
-        created_at: createdAt,
+        user_id: userId,
+        name,
+        email,
+        phone: value.phone,
+        review_note: value.review_note,
+        created_at: value.created_at,
         status: value.status,
     };
 }
@@ -204,7 +218,6 @@ class AdminApi {
     async listCreatorRequests(
         params: ListCreatorRequestsParams,
     ): Promise<AdminListResult<CreatorRequest>> {
-        // TODO: sambungkan ke endpoint backend
         const response = await ApiServices.get(ApiEndpoints.adminCreatorRequests, {
             params,
         });
@@ -216,7 +229,6 @@ class AdminApi {
         decision: "approve" | "reject",
         reason?: string,
     ): Promise<void> {
-        // TODO: sambungkan ke endpoint backend
         const endpoint =
             decision === "approve"
                 ? ApiEndpoints.approveCreatorRequest(requestId)

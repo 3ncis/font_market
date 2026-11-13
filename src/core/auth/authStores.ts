@@ -120,10 +120,17 @@ export const useAuthStore = defineStore("auth", {
             this.user = user;
             this.token = token;
 
-            if (hasRole(user, "admin")) {
+            const redirect = router.currentRoute.value.query.redirect;
+            if (
+                typeof redirect === "string" &&
+                redirect.startsWith("/") &&
+                !redirect.startsWith("//")
+            ) {
+                void router.push(redirect);
+            } else if (hasRole(user, "admin")) {
                 void router.push({ name: "admin-users" });
             } else if (hasRole(user, "creator")) {
-                void router.push("#");
+                void router.push({ name: "creator-fonts" });
             } else {
                 void router.push("/");
             }
@@ -133,15 +140,6 @@ export const useAuthStore = defineStore("auth", {
 
         async register(name: string, email: string, password: string) {
             const result: unknown = await AuthApi.register({ name, email, password });
-            return this.applyAuth(result);
-        },
-
-        async registerCreator(name: string, email: string, password: string) {
-            const result: unknown = await AuthApi.registerCreator({
-                name,
-                email,
-                password,
-            });
             return this.applyAuth(result);
         },
 
