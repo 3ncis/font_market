@@ -162,7 +162,7 @@ export default defineComponent({
         </RouterLink>
 
         <RouterLink
-          :to="{ name: 'home' }"
+          :to="{ name: authStore.isCreator ? 'creator-fonts' : 'request-designer' }"
           class="inline-flex items-center justify-center gap-2 rounded bg-[#121214] px-3 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#343438] sm:px-4 sm:text-[13px]"
         >
           <span class="whitespace-nowrap">{{ authStore.isCreator ? 'Submit Karya' : 'Jadi Designer' }}</span>
