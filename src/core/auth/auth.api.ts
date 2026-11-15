@@ -25,6 +25,14 @@ class ApiAuth {
         return readSuccessResponse(response);
     }
 
+    async loginWithGoogle(credential: string): Promise<unknown> {
+        const response = await ApiServices.post(
+            ApiEndpoints.googleLogin,
+            { credential },
+        );
+        return readSuccessResponse(response);
+    }
+
     async getCurrentUser(): Promise<unknown> {
         const response = await ApiServices.get(ApiEndpoints.currentUser, {
             params: { _: Date.now() },

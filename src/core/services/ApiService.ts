@@ -4,16 +4,12 @@ import { ApiBaseUrl, ApiEndpoints } from "../utils/url_api";
 
 const apiKey = import.meta.env.VITE_API_KEY?.trim();
 
-if (!apiKey) {
-    throw new Error("VITE_API_KEY must be configured before using the API.");
-}
-
 const ApiService = axios.create({
     baseURL: ApiBaseUrl,
     timeout: 10_000,
     headers: {
         Accept: "application/json",
-        "x-api-key": apiKey,
+        ...(apiKey ? { "x-api-key": apiKey } : {}),
     },
 });
 

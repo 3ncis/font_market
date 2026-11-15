@@ -57,6 +57,12 @@ const routes = [
     meta: { title: 'Masuk Akun' }
   },
   {
+    path: '/auth/google/callback',
+    name: 'google-auth-callback',
+    component: () => import('@/views/auth/GoogleOAuthCallback.vue'),
+    meta: { title: 'Masuk dengan Google' }
+  },
+  {
     path: '/register/creator',
     alias: '/register/designer',
     name: 'register-creator',

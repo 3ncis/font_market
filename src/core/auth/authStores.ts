@@ -98,6 +98,23 @@ function getErrorStatus(error: unknown): number | undefined {
         : undefined;
 }
 
+function redirectAuthenticatedUser(user: PublicUser): void {
+    const redirect = router.currentRoute.value.query.redirect;
+    if (
+        typeof redirect === "string" &&
+        redirect.startsWith("/") &&
+        !redirect.startsWith("//")
+    ) {
+        void router.push(redirect);
+    } else if (hasRole(user, "admin")) {
+        void router.push({ name: "admin-users" });
+    } else if (hasRole(user, "creator")) {
+        void router.push({ name: "creator-fonts" });
+    } else {
+        void router.push("/");
+    }
+}
+
 export const useAuthStore = defineStore("auth", {
     state: (): AuthState => ({
         user: null,
@@ -119,21 +136,7 @@ export const useAuthStore = defineStore("auth", {
             JwtService.saveToken(token);
             this.user = user;
             this.token = token;
-
-            const redirect = router.currentRoute.value.query.redirect;
-            if (
-                typeof redirect === "string" &&
-                redirect.startsWith("/") &&
-                !redirect.startsWith("//")
-            ) {
-                void router.push(redirect);
-            } else if (hasRole(user, "admin")) {
-                void router.push({ name: "admin-users" });
-            } else if (hasRole(user, "creator")) {
-                void router.push({ name: "creator-fonts" });
-            } else {
-                void router.push("/");
-            }
+            redirectAuthenticatedUser(user);
 
             return user;
         },
@@ -146,6 +149,34 @@ export const useAuthStore = defineStore("auth", {
         async login(email: string, password: string) {
             const result: unknown = await AuthApi.login(email, password);
             return this.applyAuth(result);
+        },
+
+        async loginWithGoogle(credential: string) {
+            const result: unknown = await AuthApi.loginWithGoogle(credential);
+            return this.applyAuth(result);
+        },
+
+        async completeGoogleLogin(token: string) {
+            const normalizedToken = token.trim();
+            if (!normalizedToken) {
+                throw new TypeError("Google OAuth did not return a valid token.");
+            }
+
+            JwtService.saveToken(normalizedToken);
+            this.token = normalizedToken;
+
+            try {
+                const user = await this.loadCurrentUser();
+                if (!user) {
+                    throw new TypeError("Google OAuth did not return a user profile.");
+                }
+
+                redirectAuthenticatedUser(user);
+                return user;
+            } catch (error) {
+                this.clearAuth();
+                throw error;
+            }
         },
 
         async loadCurrentUser(): Promise<PublicUser | null> {

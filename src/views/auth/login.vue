@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useAuthStore } from "@/core/auth/authStores";
 import { readErrorResponse } from "@/core/utils/apiResponse";
 
@@ -7,7 +7,33 @@ const authStore = useAuthStore();
 const email = ref("");
 const password = ref("");
 const isSubmitting = ref(false);
+const isGoogleSubmitting = ref(false);
 const errorMessage = ref("");
+const googleErrorMessage = ref("");
+const googleButton = ref<HTMLElement | null>(null);
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim();
+
+function loadGoogleIdentityServices(): Promise<void> {
+    if (window.google?.accounts.id) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+            if (window.google?.accounts.id) {
+                resolve();
+            } else {
+                reject(new Error("Google Identity Services gagal dimuat."));
+            }
+        };
+        script.onerror = () => reject(new Error("Google Identity Services gagal dimuat."));
+        document.head.append(script);
+    });
+}
 
 async function submitLogin() {
     if (isSubmitting.value) return;
@@ -26,6 +52,58 @@ async function submitLogin() {
         isSubmitting.value = false;
     }
 }
+
+async function submitGoogleCredential(credential: string) {
+    if (isGoogleSubmitting.value) return;
+
+    isGoogleSubmitting.value = true;
+    googleErrorMessage.value = "";
+
+    try {
+        await authStore.loginWithGoogle(credential);
+    } catch (error) {
+        googleErrorMessage.value = readErrorResponse(
+            error,
+            "Login dengan Google gagal. Silakan coba lagi.",
+        );
+    } finally {
+        isGoogleSubmitting.value = false;
+    }
+}
+
+onMounted(async () => {
+    if (!googleClientId) {
+        googleErrorMessage.value = "Google sign-in belum dikonfigurasi.";
+        return;
+    }
+
+    try {
+        await loadGoogleIdentityServices();
+        if (!googleButton.value || !window.google?.accounts.id) return;
+
+        window.google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: (response) => {
+                if (!response.credential?.trim()) {
+                    googleErrorMessage.value = "Google tidak mengembalikan token login yang valid.";
+                    return;
+                }
+                void submitGoogleCredential(response.credential);
+            },
+        });
+        window.google.accounts.id.renderButton(googleButton.value, {
+            theme: "outline",
+            size: "large",
+            text: "continue_with",
+            width: googleButton.value.clientWidth,
+        });
+    } catch (error) {
+        googleErrorMessage.value = readErrorResponse(
+            error,
+            "Tidak dapat memuat layanan login Google.",
+        );
+    }
+});
 </script>
 
 <template>
@@ -98,6 +176,31 @@ async function submitLogin() {
                     {{ isSubmitting ? "Memproses..." : "Masuk" }}
                 </button>
             </form>
+
+            <div class="my-5 flex items-center gap-3" aria-hidden="true">
+                <span class="h-px flex-1 bg-[#E2E2E4]"></span>
+                <span class="font-['Geist'] text-xs text-[#68686C]">atau</span>
+                <span class="h-px flex-1 bg-[#E2E2E4]"></span>
+            </div>
+
+            <div ref="googleButton" class="flex min-h-11 justify-center"></div>
+            <p
+                v-if="isGoogleSubmitting"
+                class="mt-2 text-center font-['Geist'] text-xs text-[#68686C]"
+                role="status"
+            >
+                Memproses login Google...
+            </p>
+            <p
+                v-if="googleErrorMessage"
+                class="mt-2 text-center font-['Geist'] text-xs text-[#9A3D32]"
+                role="alert"
+            >
+                {{ googleErrorMessage }}
+            </p>
+            <p class="mt-2 text-center font-['Geist'] text-xs text-[#68686C]">
+                Masuk atau daftar menggunakan akun Google.
+            </p>
         </section>
     </main>
 </template>

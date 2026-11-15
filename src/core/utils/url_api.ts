@@ -33,6 +33,7 @@ export const ApiBaseUrl = configuredApiBaseUrl.replace(/\/+$/, "");
 export const ApiEndpoints = {
     register: "/auth/register",
     login: "/auth/login",
+    googleLogin: "/auth/login/google",
     currentUser: "/auth/me",
     adminUsers: "/admin/users",
     adminUserStatus: (userId: string) =>

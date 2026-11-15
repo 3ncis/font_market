@@ -9,10 +9,32 @@ export default defineComponent({
 
   setup() {
     const isVisible = ref(true);
+    const isUserMenuOpen = ref(false);
     const cartStore = useCartStore();
     const authStore = useAuthStore();
     let lastScrollY = 0;
     let ticking = false;
+
+    const closeUserMenu = () => {
+      isUserMenuOpen.value = false;
+    };
+
+    const handleDocumentClick = (event) => {
+      if (!event.target.closest('[data-user-menu]')) {
+        closeUserMenu();
+      }
+    };
+
+    const handleKeydown = (event) => {
+      if (event.key === 'Escape') {
+        closeUserMenu();
+      }
+    };
+
+    const handleLogout = async () => {
+      closeUserMenu();
+      await authStore.logout();
+    };
 
     const handleScroll = () => {
       if (ticking) return;
@@ -47,16 +69,29 @@ export default defineComponent({
       window.addEventListener('scroll', handleScroll, {
         passive: true,
       });
+      document.addEventListener('click', handleDocumentClick);
+      document.addEventListener('keydown', handleKeydown);
+
+      if (authStore.token && !authStore.user) {
+        authStore.loadCurrentUser().catch((error) => {
+          console.error('Gagal memuat profil pengguna untuk navigasi akun.', error);
+        });
+      }
     });
 
     onUnmounted(() => {
       window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleDocumentClick);
+      document.removeEventListener('keydown', handleKeydown);
     });
 
     return {
       isVisible,
+      isUserMenuOpen,
       cartStore,
       authStore,
+      closeUserMenu,
+      handleLogout,
     };
   },
 
@@ -161,28 +196,67 @@ export default defineComponent({
           </span>
         </RouterLink>
 
-        <RouterLink
-          :to="{ name: authStore.isCreator ? 'creator-fonts' : 'request-designer' }"
-          class="inline-flex items-center justify-center gap-2 rounded bg-[#121214] px-3 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#343438] sm:px-4 sm:text-[13px]"
-        >
-          <span class="whitespace-nowrap">{{ authStore.isCreator ? 'Submit Karya' : 'Jadi Designer' }}</span>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+        <div v-if="authStore.isAuthenticated" class="relative" data-user-menu>
+          <button
+            type="button"
+            aria-label="Menu akun"
+            aria-haspopup="menu"
+            :aria-expanded="isUserMenuOpen"
+            class="flex h-10 w-10 items-center justify-center rounded-full border border-[#E2E2E4] text-[#121214] transition-colors hover:bg-[#FAF8F5]"
+            @click.stop="isUserMenuOpen = !isUserMenuOpen"
           >
-            <path d="M12 15V3" />
-            <path d="m7 8 5-5 5 5" />
-            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="4" />
+              <path d="M5 21a7 7 0 0 1 14 0" />
+            </svg>
+          </button>
+
+          <div
+            v-if="isUserMenuOpen"
+            role="menu"
+            aria-label="Menu akun"
+            class="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-md border border-[#E2E2E4] bg-white py-2 shadow-lg"
+          >
+            <p class="truncate px-4 py-2 text-xs text-[#68686C]">
+              {{ authStore.user?.name || 'Akun saya' }}
+            </p>
+            <RouterLink
+              :to="{ name: authStore.isCreator ? 'creator-fonts' : 'request-designer' }"
+              role="menuitem"
+              class="block px-4 py-2.5 text-sm font-medium text-[#121214] transition-colors hover:bg-[#FAF8F5]"
+              @click="closeUserMenu"
+            >
+              {{ authStore.isCreator ? 'Submit Karya' : 'Jadi Designer' }}
+            </RouterLink>
+            <div class="my-1 border-t border-[#E2E2E4]"></div>
+            <button
+              type="button"
+              role="menuitem"
+              class="block w-full px-4 py-2.5 text-left text-sm font-medium text-[#68686C] transition-colors hover:bg-[#FAF8F5] hover:text-[#121214]"
+              @click="handleLogout"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <RouterLink
+          v-else
+          :to="{ name: 'login' }"
+          class="inline-flex items-center justify-center rounded bg-[#121214] px-4 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#343438] sm:text-[13px]"
+        >
+          Login
         </RouterLink>
       </div>
     </div>

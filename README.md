@@ -29,6 +29,13 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 npm install
 ```
 
+### Google Sign-In
+
+Set `VITE_GOOGLE_CLIENT_ID` to the Google OAuth web client ID used by the backend's
+`GOOGLE_CLIENT_ID`. Add the frontend origin to that OAuth client's authorized
+JavaScript origins. Google sign-in does not require `VITE_API_KEY`; other API
+requests continue to use it when configured.
+
 ### Compile and Hot-Reload for Development
 
 ```sh
